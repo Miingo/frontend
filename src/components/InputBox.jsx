@@ -17,11 +17,6 @@ function InputBox() {
   const [successMessage, setSuccessMessage] = useState('');
   const dispatch = useDispatch();
 
-  console.log('document', document);
-  console.log('image', image);
-  console.log('video', video);
-  console.log('postDescription', postDescription);
-
   const handlePost = async (e) => {
     e.preventDefault();
 
@@ -40,14 +35,11 @@ function InputBox() {
         }
       });
       setSuccessMessage(response.data.message);
-      console.log(response);
-      console.log('SUCCESS: ', response.data.message);
       dispatch(postAdded(response.data));
       setIsUploading(false);
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setIsUploading(false);
-      console.log(error);
     } finally {
       setIsUploading(false);
       setDocument(null);
