@@ -42,7 +42,6 @@ function InputBox() {
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setIsUploading(false);
-      console.log(error);
     } finally {
       setIsUploading(false);
       setDocument(null);
