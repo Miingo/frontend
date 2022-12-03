@@ -1,26 +1,26 @@
+import { Link, useNavigate } from 'react-router-dom';
+
 import Boards from '../components/Boards';
 import BottomNav from '../components/BottomNav';
 import Feed from '../components/Feed';
 import Header from '../components/Header';
 import { HiOutlineLogout } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
 import React from 'react';
 import SideFeed from '../components/SideFeed';
 import Statuses from '../components/Statuses';
 import axios from '../services/axios-config';
-import { signout } from '../app/slices/authSlice';
-import { useDispatch } from 'react-redux';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { useNavigate } from 'react-router-dom';
+import { state } from '../state';
+import { useSnapshot } from 'valtio';
 
 const { useState } = React;
 
 function Home() {
   const [logout, setLogout] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [user] = useLocalStorage('user');
-  const [userName] = useState(user.name.split(" "));
+  const snapshot = useSnapshot(state);
+  const name = snapshot.user?.name;
+
+  const userName = name?.split(' ')[0];
 
   const showDropdown = () => {
     setLogout(!logout);
@@ -30,18 +30,24 @@ function Home() {
     e.preventDefault();
 
     try {
-      await axios.patch('/auth/logout');
-      dispatch(signout());
+      await axios.patch('/auth/logout', {
+        headers: {
+          Authorization: `Bearer ${snapshot.accessToken}`
+        }
+      });
+      snapshot.removeUser();
+      snapshot.removeAccessToken();
     } catch (error) {
       console.error('ERROR: ', error);
     }
-    dispatch(signout());
+    snapshot.removeUser();
+    snapshot.removeAccessToken();
     navigate('/');
   };
 
   return (
     <div className="">
-      <div className=" relative h-screen bg-miingo-gray overflow-hidden font-serif">
+      <div className=" h-screen w-full bg-miingo-gray  font-serif overflow-y-auto overflow-x-hidden ">
         {/* Header */}
         <Header onPress={showDropdown} />
 
@@ -52,12 +58,15 @@ function Home() {
             </div>
 
             <p className="text-sm hover:bg-gray-200 cursor-pointer border-b mb-2 sm:hidden">
-              {userName[0]}
+              {userName}
             </p>
 
-            <Link  to={`/profile/${user._id}`} className="text-sm hover:bg-gray-200 cursor-pointer border-b mb-2 text no-underline ">
-              {" "}
-              Profile{" "}
+            <Link
+              to={`/profile/${snapshot.user?._id}`}
+              className="text-sm hover:bg-gray-200 cursor-pointer border-b mb-2 text no-underline "
+            >
+              {' '}
+              Profile{' '}
             </Link>
             <p
               onClick={handleLogout}
@@ -73,7 +82,7 @@ function Home() {
 
         <Statuses />
 
-        <main className=" flex space-x-2 pr-3">
+        <main className="relative flex space-x-2 pr-3 pb-10 ">
           {/* chat */}
 
           {/* <Widgets /> */}

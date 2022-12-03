@@ -4,14 +4,18 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
-import JwtDecode from 'jwt-decode';
+import ActivityCard from './components/profile/ActivityCard';
+import Gallery from './components/Album/ImageGallery';
 import LoadingScreen from './components/LoadingScreen';
+import NewProfilePage from './pages/Profile_Page';
+import StatusCarousel from './components/StatusCarousel';
 import api from './services/axios-config';
-import { setAccessToken } from './app/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { devtools } from 'valtio/utils';
+import { state } from './state';
 import { useEffect } from 'react';
 import useLocalStorage from './hooks/useLocalStorage';
 import { useLocation } from 'react-router-dom';
+import { useSnapshot } from 'valtio';
 
 const Loadable = (Component) => (props) => {
   return (
@@ -26,19 +30,24 @@ const Signin = Loadable(lazy(() => import('./pages/Login')));
 const Signup = Loadable(lazy(() => import('./pages/Register')));
 const Home = Loadable(lazy(() => import('./pages/Home')));
 const Messages = Loadable(lazy(() => import('./pages/Messages')));
-const GroupFeeds = Loadable(lazy(()=> import("./pages/GroupFeeds")));
-const GroupMessages = Loadable(lazy(() => import("./pages/GroupMessages")));
+const GroupFeeds = Loadable(lazy(() => import('./pages/GroupFeeds')));
+const GroupMessages = Loadable(lazy(() => import('./pages/GroupMessages')));
 const Profile = Loadable(lazy(() => import('./pages/ProfilePage')));
 
-
 export default () => {
-  const [accessToken] = useLocalStorage('accessToken');
-  const dispatch = useDispatch();
   const location = useLocation();
+  const snapshot = useSnapshot(state);
+
+  useEffect(
+    () => () =>
+      devtools(state, {
+        name: 'MIINGO_STATE',
+        enabled: process.env.NODE_ENV !== 'production'
+      })
+  );
 
   useEffect(() => {
-    if (!accessToken) return;
-    const id = setInterval(() => {
+    const intervalID = setInterval(() => {
       if (
         location.pathname !== 'login' ||
         location.pathname !== '/register' ||
@@ -47,14 +56,13 @@ export default () => {
         api
           .get('/auth/refresh-token', {
             headers: {
-              Authorization: `Bearer ${accessToken}`
+              Authorization: `Bearer ${snapshot.accessToken}`
             }
           })
           .then((res) => {
             const data = res.data;
             console.log('RES: ', data);
 
-            dispatch(setAccessToken(data.accessToken));
             localStorage.setItem('user', JSON.stringify(data));
             localStorage.setItem(
               'accessToken',
@@ -64,8 +72,8 @@ export default () => {
       }
     }, 50 * 60 * 1000);
 
-    return () => clearInterval(id);
-  }, [accessToken, dispatch, location.pathname]);
+    return () => clearInterval(intervalID);
+  }, [snapshot.accessToken, location.pathname]);
 
   return (
     <>
@@ -73,11 +81,14 @@ export default () => {
         <Route path="/" element={<Signin />} />
         <Route path="login" element={<Signin />} />
         <Route path="register" element={<Signup />} />
-
+        <Route path="ld" element={<NewProfilePage />} />
+        <Route path="ad" element={<ActivityCard />} />
+        <Route path="gallery" element={<Gallery />} />
+        <Route path="status" element={<StatusCarousel />} />
         <Route
           path="profile"
           element={
-            <RequireAuth redirectTo="/login">
+            <RequireAuth>
               <Profile />
             </RequireAuth>
           }
@@ -85,7 +96,7 @@ export default () => {
         <Route
           path="feed"
           element={
-            <RequireAuth redirectTo="/login">
+            <RequireAuth>
               <Home />
             </RequireAuth>
           }
@@ -93,7 +104,7 @@ export default () => {
         <Route
           path="messages"
           element={
-            <RequireAuth redirectTo="/login">
+            <RequireAuth>
               <Messages />
             </RequireAuth>
           }
@@ -102,41 +113,36 @@ export default () => {
         <Route
           path="group_messages"
           element={
-            <RequireAuth redirectTo="/login">
+            <RequireAuth>
               <GroupMessages />
-
             </RequireAuth>
           }
         />
 
-         <Route
+        <Route
           path="/profile/:id"
           element={
-            <RequireAuth redirectTo="/login">
-                <Profile />
+            <RequireAuth>
+              <Profile />
             </RequireAuth>
           }
         />
 
-      
         <Route
           path="groups"
           element={
-            <RequireAuth redirectTo="/login">
+            <RequireAuth>
               <GroupFeeds />
             </RequireAuth>
           }
         />
-        
       </Routes>
-
-      
     </>
   );
 };
 
-const RequireAuth = ({ children, redirectTo }) => {
-  const [user, _] = useLocalStorage('user');
+const RequireAuth = ({ children }) => {
+  const [user] = useLocalStorage('user');
 
-  return user ? children : <Navigate to={redirectTo} />;
+  return user ? children : <Navigate to="/login" />;
 };

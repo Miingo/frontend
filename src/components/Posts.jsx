@@ -1,80 +1,75 @@
-import React, { useState } from 'react';
-import Addfriends from './Addfriends';
+import React, { useEffect, useState } from 'react';
 
+import Addfriends from './Addfriends';
 import Post from './Post';
+import axios from '../services/axios-config';
+import { state } from '../state';
+import { useSnapshot } from 'valtio';
 
 function Posts() {
+  const snapshot = useSnapshot(state);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    axios
+      .get('/post', {
+        headers: {
+          Authorization: `Bearer ${snapshot.accessToken}`
+        }
+      })
+      .then((res) => {
+        state.posts = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+      })
+      .catch((err) => {
+        setError(err.response.data.message);
+      });
+  }, [snapshot.accessToken]);
 
-    const [newPosts ] = useState([
-			{
-				id: 1,
-				name: "muwonge lawrence",
-				message: "how are you test one two",
-				email: "muwongelawrence44@gmail.com",
-				timestamp: "6:00 am",
-				postImage:
-					"https://res.cloudinary.com/itgenius/image/upload/v1668007542/pexels-mahdi-chaghari-12463279_cwiw1n.jpg",
-			},
+  const posts = [...state.posts].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
-			{
-				id: 2,
-				name: "muwonge lawrence",
-				message: "how are you test one two",
-				email: "muwongelawrence44@gmail.com",
-				timestamp: "7:00 am",
-				postImage:
-					"https://res.cloudinary.com/itgenius/image/upload/v1668007553/pexels-jonathan-borba-12031357_rzxxvm.jpg",
-			},
-			{
-				id: 3,
-				name: "muwonge lawrence",
-				message: "how are you test one two",
-				email: "muwongelawrence44@gmail.com",
-				timestamp: "8:00 am",
-				postImage:
-					"https://res.cloudinary.com/itgenius/image/upload/v1668007538/pexels-martin-boh%C3%A1%C4%8D-10288457_uwpcbd.jpg",
-			},
-			{
-				id: 4,
-				name: "muwonge lawrence",
-				message: "how are you test one two",
-				email: "muwongelawrence44@gmail.com",
-				timestamp: "8:00 am",
-				postImage:
-					"https://res.cloudinary.com/itgenius/image/upload/v1668007538/pexels-martin-boh%C3%A1%C4%8D-10288457_uwpcbd.jpg",
-			},
-		]);
+  return (
+    <div className="w-full md:w-[640px] space-y-4">
+      {posts.slice(0, 1).map((post) => (
+        <Post
+          key={post._id}
+          name={post.user ? post.user.name : "creator's name"}
+          postDesc={post.postDesc}
+          email={post.user ? post.user.email : "creator's email"}
+          createdAt={post.createdAt}
+          user={post.user}
+          image={
+            post.image
+              ? `https://api1.miingoapp.com/${post.image}?not-from-cache-please`
+              : null
+          }
+        />
+      ))}
 
+      <Addfriends />
+      {posts.slice(1, snapshot.posts.length).map((post) => (
+        <Post
+          key={post._id}
+          name={post.user ? post.user.name : "creator's name"}
+          postDesc={post.postDesc}
+          email={post.user ? post.user.email : "creator's email"}
+          createdAt={post.createdAt}
+          image={
+            post.image
+              ? `https://api1.miingoapp.com/${post.image}?not-from-cache-please`
+              : null
+          }
+          likes={post.likes.length}
+          comments={post.comments}
+          _id={post._id}
+        />
+      ))}
 
-    return (
-
-        <div className = "space-y-4">
-            { newPosts.slice(0,2).map(({id , name ,message, email ,timestamp ,postImage })=> (
-                <Post 
-                 key = { id }
-                 name = { name }
-                 message = {message}
-                 email = {email}
-                 timestamp = {timestamp}
-                 postImage = {postImage}
-                 />
-            ))}
-
-              <Addfriends />
-
-			  { newPosts.slice(2,newPosts.length).map(({id , name ,message, email ,timestamp ,postImage })=> (
-                <Post 
-                 key = { id }
-                 name = { name }
-                 message = {message}
-                 email = {email}
-                 timestamp = {timestamp}
-                 postImage = {postImage}
-                 />
-            ))}
-            
-        </div>
-    ); 
+      {error && <p className="text-red-500">{error}</p>}
+    </div>
+  );
 }
 
 export default Posts;

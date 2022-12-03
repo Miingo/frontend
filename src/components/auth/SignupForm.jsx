@@ -13,42 +13,37 @@ import { DividerWithText } from './DividerWithText';
 import { FaGoogle } from 'react-icons/fa';
 import Input from '../Input';
 import axios from '../../services/axios-config';
-import { register } from '../../app/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { state } from '../../state';
 import { useNavigate } from 'react-router-dom';
+import { useSnapshot } from 'valtio';
 import { useState } from 'react';
 
 export const SignupForm = () => {
   const [email, setEmail] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
+  const snapshot = useSnapshot(state);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       const {
-        data: { user }
+        data: { user, accessToken }
       } = await axios.post('/auth/signup', {
         name,
         email,
         password,
+        dob: dateOfBirth,
         gender: selectedGender
       });
-      const res = await axios.post('/auth/signin', {
-        email: user.email,
-        password: user.password
-      });
-      const accessToken = res.data.accessToken;
-      console.log('TOK: ', accessToken);
-      console.log('USER: ', user);
-      dispatch(register({ user, accessToken }));
+      snapshot.setUser(user);
+      snapshot.setAccessToken(accessToken);
       setIsLoading(false);
       navigate('/feed');
     } catch (err) {
@@ -57,6 +52,9 @@ export const SignupForm = () => {
     }
   };
 
+  const handleDateChange = (e) => {
+    setDateOfBirth(e.target.value);
+  };
   return (
     <Box
       minH="100vh"
@@ -112,11 +110,7 @@ export const SignupForm = () => {
                   value={password}
                   onChange={({ target }) => setPassword(target.value)}
                 />
-                {error && (
-                  <Text color="red.500" fontSize="sm">
-                    {error}
-                  </Text>
-                )}
+
                 <label htmlFor="gender">Gender</label>
                 <Select
                   id="gender"
@@ -134,8 +128,13 @@ export const SignupForm = () => {
                   id="dateOfBirth"
                   name="dateOfBirth"
                   value={dateOfBirth}
-                  onChange={({ target }) => setDateOfBirth(target.value)}
+                  onChange={(e) => handleDateChange(e)}
                 />
+                {error && (
+                  <Text color="red.500" textAlign={'center'} fontSize="sm">
+                    {error}
+                  </Text>
+                )}
                 <Button
                   type="submit"
                   colorScheme="blue"
