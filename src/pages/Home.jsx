@@ -51,8 +51,6 @@ function Home({ contentType }) {
   };
 
   return (
-    <div className="">
-      
       <div className=" h-screen w-full bg-miingo-gray  font-serif overflow-y-auto overflow-x-hidden ">
         {/* Header */}
         <Header onPress={showDropdown} />
@@ -130,7 +128,7 @@ function Home({ contentType }) {
           />
         ) : null}
 
-        <main className="relative flex space-x-2 pr-3 pb-10 ">
+        <main className="relative flex space-x-2 pr-3 pb-10">
           {/* chat */}
 
           {/* <Widgets /> */}
@@ -147,7 +145,6 @@ function Home({ contentType }) {
 
         <BottomNav />
       </div>
-    </div>
   );
 }
 
