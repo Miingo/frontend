@@ -14,11 +14,8 @@ function Header({ onPress, showMenuModal }) {
     navigate('/coming');
   };
 
-  
-  
   const [showSearch, setShowSearch] = useState(false);
 
-  // sticky top-0 z-40
   return (
     <div className=" bg-white flex justify-between p-1 lg:pr-10 lg:px-5 shadow-lg space-x-2 md:space-x-4">
       {/* left */}
@@ -35,14 +32,14 @@ function Header({ onPress, showMenuModal }) {
       {/* center */}
 
       <div className="flex flex-grow items-center space-x-2 md:space-x-4  md:w-[500px] lg:w-[700px] ">
-        <div className="flex items-center rounded-full bg-white p-2 border-2 md:flex-grow">
+        <div className="w-full flex items-center rounded-full bg-white p-2 border-2 flex-grow">
 
           <input
             type="text"
             placeholder="Start typing to search..."
             className={` ${
 
-              showSearch ? "w-32 md:flex-grow " : "hidden md:flex md:flex-grow"
+              showSearch ? "w-full md:flex-grow " : "hidden md:flex md:flex-grow"
             } mx-2 items-center bg-transparent outline-none placeholder-gray-500  text-gray-700`}
           />
 
@@ -60,7 +57,7 @@ function Header({ onPress, showMenuModal }) {
       </div>
 
       {/*  Right */}
-      <div className="flex justify-around items-center sm:space-x-2 md:space-x-6 w-56 md:w-80">
+      <div className={` ${showSearch && "hidden md:flex"} flex justify-around items-center sm:space-x-2 md:space-x-6 w-56 md:w-80`}>
         <div className="hidden md:inline-flex items-center relative  cursor-pointer">
           <span className="absolute top-0 right-0  h-4 w-4 bg-red text-center rounded-full text-white text-xs font-bold">
             {" "}
@@ -131,10 +128,10 @@ function Header({ onPress, showMenuModal }) {
           <div
             onClick={showMenuModal}
 
-            className={`${showSearch && "hidden"} cursor-pointer lg:hidden`}
+            className={`${showSearch && "hidden md:inline-flex"} cursor-pointer lg:hidden`}
 
           >
-            <HiMenuAlt3 className=" h-8 w-8 " />
+            <HiMenuAlt3 className="h-8 w-8" />
           </div>
         </div>
       </div>
