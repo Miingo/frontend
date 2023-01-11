@@ -8,6 +8,7 @@ function Contact({ src, name, online, timestamp }) {
   const createChat = (e) => {
     e.preventDefault();
     try {
+      
       navigate("/messages", {
         state: {
           src: src,
