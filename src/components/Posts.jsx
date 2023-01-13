@@ -10,7 +10,6 @@ import { useSnapshot } from 'valtio';
 function Posts() {
   const [error, setError] = useState(null);
   const { accessToken, me: loggedInUser, posts } = useSnapshot(state);
-  console.log('LOGGEDIN USER: ', accessToken);
 
   useEffect(() => {
     axios

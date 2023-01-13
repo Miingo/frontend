@@ -1,23 +1,21 @@
-import { useContext, useState } from "react";
-import axios from "../../services/axios-config";
-import { HiCamera } from "react-icons/hi";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { useContext, useState } from 'react';
+
+import { HiCamera } from 'react-icons/hi';
+import axios from '../../services/axios-config';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 function ProfileCaption({ handleEdit, user }) {
-  
   const [editProfile, setEditProfile] = useState(true);
-  const [accessToken] = useLocalStorage("accessToken");
+  const [accessToken] = useLocalStorage('accessToken');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (pickedFile) => {
     // setLoading(true);
 
-    console.log(pickedFile);
 
     // const file = e.target.files[0];
     // setImage(e.target.result);
-    // console.log(image);
 
     // const reader = new FileReader();
 
@@ -31,23 +29,21 @@ function ProfileCaption({ handleEdit, user }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("profileImage", image);
+    formData.append('profileImage', image);
 
     axios
       .patch(`/user/${user._id}`, formData)
       .then((response) => {
-        console.log(response.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setLoading(false);
       });
   };
 
-  const cameraIcon = document.querySelector("#camera");
-  cameraIcon?.addEventListener("click", () => {
-    document.getElementById("profile_image").click();
+  const cameraIcon = document.querySelector('#camera');
+  cameraIcon?.addEventListener('click', () => {
+    document.getElementById('profile_image').click();
   });
 
   return (
@@ -110,7 +106,7 @@ function ProfileCaption({ handleEdit, user }) {
             <button
               onClick={handleEdit}
               className={`flex  mx-auto ${
-                !editProfile ? "bg-blue text-white" : "text-blue"
+                !editProfile ? 'bg-blue text-white' : 'text-blue'
               } px-3 py-1
                         md:px-5 rounded-lg  font-normal hover:shadow-xl active:scale-90
                         transition duration-300 border border-blue`}

@@ -1,130 +1,123 @@
-import React, { useState } from "react";
-import { HiOutlineX } from "react-icons/hi";
-import { HiPencil } from "react-icons/hi";
-import { HiDocument } from "react-icons/hi";
-import AboutField from "./AboutField";
-import instance from "../../services/axios-config";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import React, { useState } from 'react';
+
+import AboutField from './AboutField';
+import { HiDocument } from 'react-icons/hi';
+import { HiOutlineX } from 'react-icons/hi';
+import { HiPencil } from 'react-icons/hi';
+import instance from '../../services/axios-config';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 function About() {
-
   const [edit, setEdit] = useState(false);
-  const [intro,setIntro] = useState("")
-  const [dob,setDob] = useState("")
-  const [phone,setPhone] = useState("")
-  const [gender,setGender] = useState("")
-  const [country,setCountry] = useState("")
-  const [relationship,setRelationship] = useState("")
- const  [city,setCity] = useState("")
- const [email,setEmail] = useState("")
- const [website,setWebsite] = useState("")
- const [joined,setJoined] = useState("")
- const [user] = useLocalStorage("user");
+  const [intro, setIntro] = useState('');
+  const [dob, setDob] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
+  const [country, setCountry] = useState('');
+  const [relationship, setRelationship] = useState('');
+  const [city, setCity] = useState('');
+  const [email, setEmail] = useState('');
+  const [website, setWebsite] = useState('');
+  const [joined, setJoined] = useState('');
+  const [user] = useLocalStorage('user');
   const [inputFields] = useState([
     {
       id: 1,
-      label: "Intro",
-      input_type: "text",
+      label: 'Intro',
+      input_type: 'text',
       select: false,
-      placeholder: "",
+      placeholder: '',
       select_options: [],
-      onChange:(e)=>setIntro(e.target.value)
+      onChange: (e) => setIntro(e.target.value)
     },
     {
       id: 2,
-      label: "Date-Of-Birth",
-      input_type: "date",
+      label: 'Date-Of-Birth',
+      input_type: 'date',
       select: false,
-      placeholder: "",
+      placeholder: '',
       select_options: [],
-      onChange:(e)=>setDob(e.target.value)
-
+      onChange: (e) => setDob(e.target.value)
     },
     {
       id: 3,
-      label: "Phone Number",
-      input_type: "text",
+      label: 'Phone Number',
+      input_type: 'text',
       select: false,
-      placeholder: "",
+      placeholder: '',
       select_options: [],
-      onChange:(e)=>setPhone(e.target.value)
+      onChange: (e) => setPhone(e.target.value)
     },
     {
       id: 4,
-      label: "Gender",
-      input_type: "text",
+      label: 'Gender',
+      input_type: 'text',
       select: true,
-      placeholder: "Select Gender",
-      select_options: ["Male", "Female"],
-      onChange:(e)=>setGender(e.target.value)
-
+      placeholder: 'Select Gender',
+      select_options: ['Male', 'Female'],
+      onChange: (e) => setGender(e.target.value)
     },
     {
       id: 5,
-      label: "Country",
-      input_type: "text",
+      label: 'Country',
+      input_type: 'text',
       select: false,
-      placeholder: "",
+      placeholder: '',
       select_options: [],
-      onChange:(e)=>setCountry(e.target.value)
+      onChange: (e) => setCountry(e.target.value)
     },
     {
       id: 6,
-      label: "Relationship",
-      input_type: "text",
+      label: 'Relationship',
+      input_type: 'text',
       select: true,
-      placeholder: "Relationship",
-      select_options: ["Single", "Married", "Divorced"],
-      onChange:(e)=>setRelationship(e.target.value)
+      placeholder: 'Relationship',
+      select_options: ['Single', 'Married', 'Divorced'],
+      onChange: (e) => setRelationship(e.target.value)
     },
     {
-        id: 7,
-        label: "lives in",
-        input_type: "text",
-        select: false,
-        placeholder: "City",
-        select_options: [],
-        onChange:(e)=>setCity(e.target.value)
+      id: 7,
+      label: 'lives in',
+      input_type: 'text',
+      select: false,
+      placeholder: 'City',
+      select_options: [],
+      onChange: (e) => setCity(e.target.value)
     },
     {
       id: 8,
-      label: "Secondary Email Address",
-      input_type: "email",
+      label: 'Secondary Email Address',
+      input_type: 'email',
       select: false,
-      placeholder: "",
+      placeholder: '',
       select_options: [],
-      onChange:(e)=>setEmail(e.target.value)
+      onChange: (e) => setEmail(e.target.value)
     },
     {
       id: 9,
-      label: "Website",
-      input_type: "text",
+      label: 'Website',
+      input_type: 'text',
       select: false,
-      placeholder: "",
+      placeholder: '',
       select_options: [],
-      onChange:(e)=>setWebsite(e.target.value)
+      onChange: (e) => setWebsite(e.target.value)
     },
     ,
     {
       id: 10,
-      label: "Joined",
-      input_type: "text",
+      label: 'Joined',
+      input_type: 'text',
       select: false,
-      placeholder: "Joined",
+      placeholder: 'Joined',
       select_options: [],
-      onChange:(e)=>setJoined(e.target.value)
-    },
+      onChange: (e) => setJoined(e.target.value)
+    }
   ]);
 
-
-
-  
-  const handleSubmit = async(e)=>{
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const {
-        data
-      } = await instance.patch(`/user/profile/${user._id}`, {
+      const { data } = await instance.patch(`/user/profile/${user._id}`, {
         intro,
         dob,
         phone,
@@ -134,17 +127,12 @@ function About() {
         email,
         website,
         joined
-      },
-      );
-      console.log(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+      });
+    } catch (error) {}
+  };
   return (
     <div className="hidden lg:flex flex-col shadow-lg bg-white rounded-md  h-auto overflow-hidden">
       <div className=" bg-white flex items-center justify-between text-gray-700 mb-5 px-3 border-b">
-
         <div className="">
           <h2 className="  text-lg text-gray-700 font-medium  py-4 font-sans">
             About
@@ -153,7 +141,10 @@ function About() {
 
         <div className="flex items-center space-x-3">
           {edit && (
-            <div onClick={handleSubmit} className="flex items-center justify-center w-8 h-8 rounded-full bg-lightgraybg font-bold  p-2 cursor-pointer">
+            <div
+              onClick={handleSubmit}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-lightgraybg font-bold  p-2 cursor-pointer"
+            >
               <HiDocument className="h-6 w-6" />
             </div>
           )}
@@ -185,22 +176,29 @@ function About() {
       </div>
 
       <form className="grid grid-cols-1 gap-y-2 px-4">
-        {inputFields.map(({ id,  label ,input_type , select, placeholder, select_options,onChange}) => (
-           
-           <AboutField 
-             key = { id }
-             label = { label }
-             input_type = { input_type }
-             select = { select }
-             placeholder = { placeholder }
-             select_options = { select_options }
-             enable_edit = { edit }
-             onChange={onChange}
-           />
-           
-        ))}
+        {inputFields.map(
+          ({
+            id,
+            label,
+            input_type,
+            select,
+            placeholder,
+            select_options,
+            onChange
+          }) => (
+            <AboutField
+              key={id}
+              label={label}
+              input_type={input_type}
+              select={select}
+              placeholder={placeholder}
+              select_options={select_options}
+              enable_edit={edit}
+              onChange={onChange}
+            />
+          )
+        )}
       </form>
-
     </div>
   );
 }

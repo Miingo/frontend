@@ -16,7 +16,12 @@ function Statuses({ handlePostStatus }) {
   const [statusOwner, setStatusOwner] = useState(null);
 
   const snap = useSnapshot(state);
+  const me = snap.me;
   const users = snap.users;
+
+  const followings = users.filter((user) => user.followers.includes(me._id));
+
+  const followers = users.filter((user) => user.followings.includes(me._id));
 
   const slideLeft2 = () => {
     var slider = document.getElementById('slider2');
@@ -51,7 +56,7 @@ function Statuses({ handlePostStatus }) {
           id="slider2"
           className=" w-[280px] md:w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
         >
-          {users?.map((user) => (
+          {followings?.map((user) => (
             <Status
               handleClick={() => {
                 setShowModal(true);

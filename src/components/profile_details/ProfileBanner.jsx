@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { HiCamera } from "react-icons/hi";
-import PartialProfileEdit from "./PartialProfileEdit";
-import ProfileCaption from "./ProfileCaption";
-import { UserProvider } from "../../context/userContext";
-import { state } from "../../state";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import { HiOutlinePencil } from "react-icons/hi2";
-import ProfileTabs from "./ProfileTabs";
+import React, { useState } from 'react';
+
+import { HiCamera } from 'react-icons/hi';
+import { HiOutlinePencil } from 'react-icons/hi2';
+import PartialProfileEdit from './PartialProfileEdit';
+import ProfileCaption from './ProfileCaption';
+import ProfileTabs from './ProfileTabs';
+import { UserProvider } from '../../context/userContext';
+import { state } from '../../state';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 function ProfileBanner() {
-  
-  const [user] = useLocalStorage("user");
+  const [user] = useLocalStorage('user');
   const [follow, setFollow] = useState(true);
   const [partialEdit, setPartialEdit] = useState(false);
 
@@ -20,13 +20,9 @@ function ProfileBanner() {
     setPartialEdit(!partialEdit);
   };
 
-  const submitCover = (file) => {
-    console.log(file);
-  };
+  const submitCover = (file) => {};
 
-  const submitProfile = (file) => {
-    console.log(file);
-  };
+  const submitProfile = (file) => {};
 
   return (
     <div className="relative mx-4 flex flex-col bg-white">
@@ -73,12 +69,12 @@ function ProfileBanner() {
               setFollow(!follow);
             }}
             className={`flex items-center space-x-1 ${
-              follow && "bg-gray rounded-lg"
+              follow && 'bg-gray rounded-lg'
             }
             flex-grow justify-center p-2 text-white cursor-pointer`}
           >
             <p className="text-xs sm:text-base">
-              {follow ? " UnFollow " : "Follow"}
+              {follow ? ' UnFollow ' : 'Follow'}
             </p>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { UserProvider, userContext } from '../context/userContext';
 import { actions, state } from '../state';
+
 import AddFriend from './AddFriend';
 import axios from '../services/axios-config';
 import { useContext } from 'react';
@@ -8,11 +9,10 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import { useSnapshot } from 'valtio';
 
 function FriendSuggestion() {
-
   const [accessToken] = useLocalStorage('accessToken');
   const [loggedInUser] = useLocalStorage('user');
   const snap = useSnapshot(state);
-  
+
   useEffect(() => {
     axios
       .get('/user', {
@@ -21,18 +21,13 @@ function FriendSuggestion() {
         }
       })
       .then((res) => {
-        // console.log(res.data);
         actions.addUsers(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [accessToken]);
 
   const users = snap.users.filter((user) => user._id !== loggedInUser._id);
-  // console.log('users: ', users);
 
- 
   return (
     <div className="flex items-center justify-center bg-white w-full">
       <div

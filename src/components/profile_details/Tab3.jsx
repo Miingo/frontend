@@ -1,35 +1,32 @@
-import React, { useEffect } from "react";
-import { SearchIcon } from "@heroicons/react/outline";
-import { UserProvider, userContext } from "../../context/userContext";
-import { actions, state } from "../../state";
-import axios from "../../services/axios-config";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import { useSnapshot } from "valtio";
-import Friend from "./Friend";
+import React, { useEffect } from 'react';
+import { UserProvider, userContext } from '../../context/userContext';
+import { actions, state } from '../../state';
+
+import Friend from './Friend';
+import { SearchIcon } from '@heroicons/react/outline';
+import axios from '../../services/axios-config';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { useSnapshot } from 'valtio';
 
 export default function Tab1() {
-  const [accessToken] = useLocalStorage("accessToken");
-  const [loggedInUser] = useLocalStorage("user");
+  const [accessToken] = useLocalStorage('accessToken');
+  const [loggedInUser] = useLocalStorage('user');
   const snap = useSnapshot(state);
 
   useEffect(() => {
     axios
-      .get("/user", {
+      .get('/user', {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+          Authorization: `Bearer ${accessToken}`
+        }
       })
       .then((res) => {
-        // console.log(res.data);
         actions.addUsers(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [accessToken]);
 
   const users = snap.users.filter((user) => user._id !== loggedInUser._id);
-  // console.log("users:", users);
 
   return (
     <div className=" flex flex-col   mt-3 bg-white px-2 py-3 rounded-lg">
@@ -51,19 +48,21 @@ export default function Tab1() {
 
       <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         <UserProvider>
-          {users.slice(0, 8).map(({ _id, name, followers, followings, image }) => (
-            <Friend
-              key={_id}
-              _id={_id}
-              name={name}
-              followers={followers}
-              followings={followings}
-              image={
-                image ||
-                `https://ui-avatars.com/api/?name=${name}&background=random`
-              }
-            />
-          ))}
+          {users
+            .slice(0, 8)
+            .map(({ _id, name, followers, followings, image }) => (
+              <Friend
+                key={_id}
+                _id={_id}
+                name={name}
+                followers={followers}
+                followings={followings}
+                image={
+                  image ||
+                  `https://ui-avatars.com/api/?name=${name}&background=random`
+                }
+              />
+            ))}
         </UserProvider>
       </div>
     </div>

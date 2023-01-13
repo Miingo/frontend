@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { HiOutlinePlusCircle } from "react-icons/hi";
 import Input from "../Input";
 
@@ -54,7 +55,6 @@ function Album() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setAddAlbum(false);
-    // console.log(title);
   };
 
   return (

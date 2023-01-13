@@ -27,7 +27,6 @@ export const compressFile = ( file ) => {
 			compressedFile = result;
 		},
 		error ( err ) {
-			console.log( err.message );
 		},
 	} );
 
