@@ -1,15 +1,16 @@
 import { ChatAltIcon, ShareIcon } from '@heroicons/react/outline';
 import { HiDotsVertical, HiX } from 'react-icons/hi';
-import { HiOutlineUserPlus } from "react-icons/hi2";
+
 import { CommentInputBox } from './CommentInputField';
 import { FaThumbsUp } from 'react-icons/fa';
+import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { Link } from 'react-router-dom';
-import TimeAgo from 'timeago-react';
 import { actions } from '../state';
 import axios from '../services/axios-config';
+import { format } from 'timeago.js';
 import { state } from '../state';
-import { useState } from 'react';
 import { useSnapshot } from 'valtio';
+import { useState } from 'react';
 
 function Post({
   postDesc,
@@ -25,12 +26,11 @@ function Post({
   const [isPostDeleted, setIsPostDeleted] = useState(false);
   //const [deletePost, setDeletePost] = useState(false);
 
-  const {accessToken, me: loggedInUser} = useSnapshot(state);
-
+  const { accessToken, me } = useSnapshot(state);
 
   const handleLike = () => {
     axios
-      .patch(`/post/like/${_id}/user/${loggedInUser._id}`, {
+      .patch(`/post/like/${_id}/user/${me._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -73,20 +73,19 @@ function Post({
               <p className="font-semibold  text-gray-500">
                 {user ? user.name : 'Anonymous'}
               </p>
-              <TimeAgo datetime={createdAt} locale="en_US" />
+              {/* <TimeAgo datetime={createdAt} locale="en_US" /> */}
+              {format(createdAt)}
             </div>
           </div>
 
           <Link
-            to={`/profile/${user ? user?._id : loggedInUser?._id}`}
+            to={`/profile/${user ? user?._id : me?._id}`}
             className="flex items-center"
           >
             <button
               className={`flex  mx-auto text-white  bg-regal-orange hover:bg-orange-400 px-2 py-1 md:px-3 rounded-full shadow-xl font-normal hover:shadow-xl active:scale-90 transition duration-300 outline-none `}
             >
-
-              <HiOutlineUserPlus className='w-4 h-4'/>
-
+              <HiOutlineUserPlus className="w-4 h-4" />
             </button>
           </Link>
         </div>
@@ -159,7 +158,7 @@ function Post({
               <button
                 onClick={handleDelete}
                 className="text-xs sm:text-base"
-                disabled={loggedInUser._id !== user._id}
+                disabled={me._id !== user._id}
               >
                 Delete Post
               </button>

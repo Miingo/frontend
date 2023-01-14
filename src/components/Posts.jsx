@@ -9,11 +9,11 @@ import { useSnapshot } from 'valtio';
 
 function Posts() {
   const [error, setError] = useState(null);
-  const { accessToken, me: loggedInUser, posts } = useSnapshot(state);
+  const { accessToken, me, posts } = useSnapshot(state);
 
   useEffect(() => {
     axios
-      .get(`/post/user/${loggedInUser._id}`, {
+      .get(`/post/user/${me._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -24,7 +24,7 @@ function Posts() {
       .catch((err) => {
         setError(err.response.data.message);
       });
-  }, [accessToken, loggedInUser._id]);
+  }, [accessToken, me._id]);
 
   return (
     <div className="w-full space-y-4">
