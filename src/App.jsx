@@ -27,14 +27,16 @@ import MenuItem from './components/MenuItem';
 import NewProfilePage from './pages/Profile_Page';
 import StatusCarousel from './components/StatusCarousel';
 import StatusPopOut from './components/status/StatusPopOut';
-import api from './services/axios-config';
+import instance from './services/axios-config';
 import axios from './services/axios-config';
+import api from './services/axios-config';
 import { devtools } from 'valtio/utils';
 import { getTokenPayload } from './utils/getTokenPayload';
 import { useEffect } from 'react';
 import useLocalStorage from './hooks/useLocalStorage';
 import { useLocation } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
+
 
 //importing icons
 
@@ -102,6 +104,24 @@ export default () => {
   const name = user?.name;
 
   const userName = name?.split(' ')[0];
+
+  useEffect(() => {
+    fetchUser();
+  });
+
+  //  console.log(userInfo)
+
+
+  const fetchUser = async () => {
+    try {
+      const { data } = await instance.get(`/user/profile/${user._id}`);
+      if (data) {
+        actions.setUserInfo(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const showDropdown = () => {
     setLogout(!logout);

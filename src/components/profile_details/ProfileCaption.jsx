@@ -1,56 +1,19 @@
 import { useContext, useState,useEffect } from 'react';
-
 import { HiCamera } from 'react-icons/hi';
-import axios from '../../services/axios-config';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import { compressImage } from "../../services/compressor";
-import instance from "../../services/axios-config";
 import config from "../../utils/envConfig";
+import { useSnapshot } from 'valtio';
+import { state } from "../../state";
 
 
 
-function ProfileCaption({ handleEdit, userInfo,handleSubmit }) {
+function ProfileCaption({ handleEdit,handleSubmit }) {
   const [editProfile, setEditProfile] = useState(true);
   const [user] = useLocalStorage('user');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { userInfo, me } = useSnapshot(state);
 
-
-  const [userProfile, setUserProfile] = useState(null);
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-
-  const fetchUser = async () => {
-    try {
-      const { data } = await instance.get(`/user/profile/${user._id}`);
-      if (data) {
-        setUserProfile(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-
-  const submitProfile = async (file) => {
-    
-    try {
-      const compressedImage = await compressImage(file);
-      const formData = new FormData();
-      formData.append("image", compressedImage);
-      const { data } = await instance.patch(`/user/${user._id}/image`, formData);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // const cameraIcon = document.querySelector('#camera');
-  // cameraIcon?.addEventListener('click', () => {
-  //   document.getElementById('profile_image').click();
-  // });
 
   return (
     <div className="hidden lg:block   absolute  top-12 left-6 md:left-3 z-30 w-72 h-72 bg-white rounded-lg shadow-lg ">
@@ -61,10 +24,11 @@ function ProfileCaption({ handleEdit, userInfo,handleSubmit }) {
               <img
                 id="preview"
                 src={
-                  userProfile?.user?.image
-                    ? `${config.API_URL}/post/stream-video?streamFile=${userProfile?.user?.image}`
-                    : `https://ui-avatars.com/api/name=${userProfile?.user?.name}&background=random`
-                }                loading="lazy"
+                  userInfo?.user.image
+                    ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user.image}`
+                    : `https://ui-avatars.com/api/name=${userInfo?.user?.name}&background=random`
+                }                
+                loading="lazy"
                 className="w-full h-full rounded-full object-cover"
                 alt="profile_caption"
               />
@@ -88,15 +52,15 @@ function ProfileCaption({ handleEdit, userInfo,handleSubmit }) {
 
           <div className="">
             <p className="flex flex-col items-center  justify-center space-y-2">
-              <h3 className="text-gray-500"> {userProfile?.user?.name} </h3>
-              <h4 className="text-gray-500"> {userProfile?.user?.email} </h4>
+              <h3 className="text-gray-500"> {userInfo?.user?.name} </h3>
+              <h4 className="text-gray-500"> {userInfo?.user?.email} </h4>
             </p>
           </div>
 
           <div className=" flex items-center justify-between space-x-2 text-gray-600">
             <div className=" px-2">
               <p className="flex flex-col items-center justify-center space-y-2">
-                <h3 className="text-gray-600"> {userProfile?.user?.followings?.length} </h3>
+                <h3 className="text-gray-600"> {userInfo?.user?.followings?.length} </h3>
                 <h4>Following</h4>
               </p>
             </div>
@@ -105,7 +69,7 @@ function ProfileCaption({ handleEdit, userInfo,handleSubmit }) {
 
             <div className="">
               <p className="flex flex-col items-center justify-center space-y-2">
-                <h3 className="text-gray-600"> {userProfile?.user?.followers?.length} </h3>
+                <h3 className="text-gray-600"> {userInfo?.user?.followers?.length} </h3>
                 <h4>Followers</h4>
               </p>
             </div>
