@@ -5,6 +5,7 @@ import { state } from '../state';
 import { useSnapshot } from 'valtio';
 
 const Widgets = ({ group }) => {
+  
   const { socket } = useSnapshot(state);
   //const [contacts, setContatcts] = useState();
   const snap = useSnapshot(state);

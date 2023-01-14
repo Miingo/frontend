@@ -9,6 +9,11 @@ function GroupMessages() {
   const location = useLocation();
   const { src, name, members } = location.state;
 
+  console.log("SRC :", src);
+  console.log("Members :", members);
+  console.log("Name :", name);
+
+
   return (
     <div className="relative h-screen bg-miingo-gray">
     

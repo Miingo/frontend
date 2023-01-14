@@ -1,5 +1,5 @@
-import React from 'react';
 import NewsFeeds from './NewsFeeds';
+import React from 'react';
 import Widgets from './Widgets';
 
 function SideFeed({ group }) {

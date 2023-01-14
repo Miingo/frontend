@@ -1,6 +1,5 @@
 import { actions, state } from './../state';
 import { useEffect, useState } from 'react';
-
 import { Spinner } from '@chakra-ui/react';
 import axios from '../services/axios-config';
 import { compressImage } from '../services/compressor';
@@ -74,14 +73,15 @@ function InputBox() {
 
   return (
     <div className="bg-white flex flex-col p-2 shadow-md text-gray-500 font-medium mt-6 ">
-      <div className="flex space-x-4  p-4 items-center ">
-        <div className=" w-10 h-10 hidden md:flex">
+      <div className="flex py-2 items-center md:space-x-3">
+        <div className="hidden md:flex w-10 h-10">
           <img
             className="w-full h-full rounded-full object-cover "
             src={`https://ui-avatars.com/api/name=${user?.name}&background=random`}
             alt="profile"
           />
         </div>
+
         <form className="flex flex-col space-y-2 w-full">
           <textarea
             id="postDescription"
