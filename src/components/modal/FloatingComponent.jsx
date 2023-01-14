@@ -1,28 +1,14 @@
 import React from "react";
-import { FloatingButton, Item } from "react-floating-button";
-import { AiFillAudio } from "react-icons/ai";
 
-const FloatingComponent = () => {
+const CustomFloatingButtons = ({ icon, onClick, bg_color }) => {
 	return (
-		<>
-			<FloatingButton>
-				  
-				<Item
-					imgSrc={<AiFillAudio />}
-					onClick={() => {
-						console.log("callback function here");
-					}}
-				/>
-				  
-				<Item
-					imgSrc={<AiFillAudio />}
-					onClick={() => {
-						console.log("callback function here");
-					}}
-				/>
-			</FloatingButton>
-		</>
+		<div
+			onClick={onClick}
+			className={`flex justify-center items-center rounded-full h-8 w-8 shadow-lg my-4   z-90 bg-white ${bg_color}`}
+		>
+			{icon}
+		</div>
 	);
 };
 
-export default FloatingComponent;
+export default CustomFloatingButtons;
