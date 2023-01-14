@@ -17,10 +17,31 @@ function ProfileBanner() {
   const [follow, setFollow] = useState(true);
   const [partialEdit, setPartialEdit] = useState(false);
   // const [usr] = useLocalStorage('user');
-  console.log(user);
+
+  const [userInfo, setUserInfo] = useState(null);
+  //  console.log(userInfo)
+  useEffect(() => {
+    fetchUser();
+  }, [userInfo]);
+
+  //  console.log(userInfo)
+
+
+  const fetchUser = async () => {
+    try {
+      const { data } = await instance.get(`/user/profile/${me._id}`);
+      if (data) {
+        setUserInfo(data);
+        // // setUser
+        // actions.setUser(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleEdit = (e) => {
     e.preventDefault();
-
+    
     setPartialEdit(!partialEdit);
   };
 
@@ -28,32 +49,23 @@ function ProfileBanner() {
     console.log(file);
     try {
       const compressedImage = await compressImage(file);
-
-      const { data } = await instance.patch(
-        `/user/${me.id}/cover`,
-        compressedImage
-      );
-      if (data) {
-        console.log(data);
-        actions.setUser(data);
-        console.log(user);
-      }
+      const formData = new FormData();
+      formData.append("cover", compressedImage);
+      const { data } = await instance.patch(`/user/${me._id}/cover`, formData);
+      console.log(data);
     } catch (error) {
-      console.log("error in submitCover", error);
+      console.log(error);
     }
   };
 
   const submitProfile = async (file) => {
+      console.log(file)
     try {
       const compressedImage = await compressImage(file);
       const formData = new FormData();
       formData.append("image", compressedImage);
-      const { data } = await instance.patch(`/user/${me.id}/image`, formData);
-      if (data) {
-        console.log(data);
-        actions.setUser(data);
-        console.log(user);
-      }
+      const { data } = await instance.patch(`/user/${me._id}/image`, formData);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +74,7 @@ function ProfileBanner() {
   return (
     <div className="relative mx-4 flex flex-col bg-white">
       <UserProvider>
-        <ProfileCaption handleEdit={handleEdit} user={user} />
+        <ProfileCaption handleEdit={handleEdit} user={userInfo} handleSubmit={submitProfile} />
       </UserProvider>
 
       {partialEdit && <PartialProfileEdit />}
@@ -70,11 +82,10 @@ function ProfileBanner() {
       <div className=" relative w-full h-56 md:h-96 ">
         <img
           src={
-            user?.image
-              ? `${config.API_URL}/post/stream-video?streamFile=${user.coverImage}`
-              : "/bg2.jpg"
+            userInfo?.user?.coverImage
+              ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user?.coverImage}`
+              : null
           }
-          loading="lazy"
           className="w-full h-full object-cover "
           alt="profile_banner"
         />
@@ -88,6 +99,7 @@ function ProfileBanner() {
             <HiOutlinePencil className=" w-4 h-4 text-white" />
             <p className="text-white "> Edit cover </p>
             <input
+              name="cover"
               type="file"
               placeholder="upload image"
               id="cover"
@@ -123,11 +135,15 @@ function ProfileBanner() {
         <div className="relative flex items-center justify-between space-x-2 p-4">
           <div className="absolute -top-6 md:-top-10 w-16 h-16 md:w-20 md:h-20  rounded-full border-4 border-white ">
             <div className="relative w-full h-full">
-               <img
-                src={ user?.image?`${config.API_URL}/post/stream-video?streamFile=${user.image}`:`https://ui-avatars.com/api/name=${user?.name}&background=random`}
+              <img
+                src={
+                  userInfo?.user?.image
+                    ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user?.image}`
+                    : `https://ui-avatars.com/api/name=${user?.user?.name}&background=random`
+                }
                 className="w-full h-full rounded-full object-cover "
                 alt="group-profile"
-              /> 
+              />
 
               <form className="absolute top-0 -right-2 flex items-center justify-center bg-gray cursor-pointer p-1 rounded-full">
                 <label
@@ -136,6 +152,7 @@ function ProfileBanner() {
                 >
                   <HiCamera className=" w-4 h-4 text-white " />
                   <input
+                    name="image"
                     type="file"
                     placeholder="upload image"
                     id="profile"
@@ -152,8 +169,10 @@ function ProfileBanner() {
 
           <div className="pl-14 md:pl-20 flex items-center flex-grow justify-between space-x-4">
             <div className="w-48">
-              <h1 className="text-gray-700 font-semibold"> {user?.name}</h1>
-              <p className="text-gray-600 text-xs "> {user?.email}</p>
+              <h1 className="text-gray-700 font-semibold">
+                {user?.user?.name}
+              </h1>
+              <p className="text-gray-600 text-xs ">{user?.user?.email}</p>
             </div>
           </div>
         </div>
@@ -167,5 +186,3 @@ function ProfileBanner() {
 }
 
 export default ProfileBanner;
-
-

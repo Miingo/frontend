@@ -17,7 +17,6 @@ function Home({ contentType }) {
    */
   useEffect(() => {
     actions.initSocket();
-    console.log('WEBSOCKET USE EFFECT!');
   }, [showModal]);
 
   return (

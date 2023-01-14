@@ -1,5 +1,6 @@
-import Contact from './Contact';
 import React, { useEffect } from 'react';
+
+import Contact from './Contact';
 import { state } from '../state';
 import { useSnapshot } from 'valtio';
 
@@ -14,8 +15,6 @@ const Widgets = ({ group }) => {
     if (socket) {
       socket.on('usersOnline', (data) => {
 
-        //setContatcts(data);
-        console.log('ONLINE USERS ', data);
       })
     }
   }, [socket]);
