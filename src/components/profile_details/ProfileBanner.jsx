@@ -13,16 +13,16 @@ import { useSnapshot } from "valtio";
 import config from "../../utils/envConfig";
 
 function ProfileBanner() {
-  const { user, me } = useSnapshot(state);
+  const { userInfo, me } = useSnapshot(state);
   const [follow, setFollow] = useState(true);
   const [partialEdit, setPartialEdit] = useState(false);
   // const [usr] = useLocalStorage('user');
 
-  const [userInfo, setUserInfo] = useState(null);
+  //const [userInfo, setUserInfo] = useState(null);
   //  console.log(userInfo)
   useEffect(() => {
     fetchUser();
-  }, [userInfo]);
+  });
 
   //  console.log(userInfo)
 
@@ -31,9 +31,11 @@ function ProfileBanner() {
     try {
       const { data } = await instance.get(`/user/profile/${me._id}`);
       if (data) {
-        setUserInfo(data);
+        //setUserInfo(data);
+        //actions.setUserInfo(data)
         // // setUser
-        // actions.setUser(data);
+        actions.setUserInfo(data);
+        console.log(userInfo)
       }
     } catch (error) {
       console.log(error);
@@ -53,6 +55,7 @@ function ProfileBanner() {
       formData.append("cover", compressedImage);
       const { data } = await instance.patch(`/user/${me._id}/cover`, formData);
       console.log(data);
+      actions.setUserInfo(data)
     } catch (error) {
       console.log(error);
     }
@@ -66,6 +69,8 @@ function ProfileBanner() {
       formData.append("image", compressedImage);
       const { data } = await instance.patch(`/user/${me._id}/image`, formData);
       console.log(data);
+     actions.updateUserImg(data)
+     // actions.setUserInfo(data)
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +144,7 @@ function ProfileBanner() {
                 src={
                   userInfo?.user?.image
                     ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user?.image}`
-                    : `https://ui-avatars.com/api/name=${user?.user?.name}&background=random`
+                    : `https://ui-avatars.com/api/name=${userInfo?.user?.name}&background=random`
                 }
                 className="w-full h-full rounded-full object-cover "
                 alt="group-profile"
@@ -170,9 +175,9 @@ function ProfileBanner() {
           <div className="pl-14 md:pl-20 flex items-center flex-grow justify-between space-x-4">
             <div className="w-48">
               <h1 className="text-gray-700 font-semibold">
-                {user?.user?.name}
+                {userInfo?.user?.name}
               </h1>
-              <p className="text-gray-600 text-xs ">{user?.user?.email}</p>
+              <p className="text-gray-600 text-xs ">{userInfo?.user?.email}</p>
             </div>
           </div>
         </div>
@@ -185,4 +190,4 @@ function ProfileBanner() {
   );
 }
 
-export default ProfileBanner;
+export default React.memo(ProfileBanner);

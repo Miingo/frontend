@@ -293,7 +293,7 @@ const RequireAuth = ({ children }) => {
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   actions.setAccessToken(accessToken);
-  
+  //actions.setUser(user)  
 
   useEffect(() => {
     if (accessToken) {

@@ -5,9 +5,10 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { useSnapshot } from 'valtio';
 import { useState } from 'react';
 import { state } from '../state';
+import config from '../utils/envConfig'
 
 function Header({ onPress, showMenuModal }) {
-  const { me: user } = useSnapshot(state);
+  const { me: user, userInfo } = useSnapshot(state);
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -113,7 +114,7 @@ function Header({ onPress, showMenuModal }) {
 
           >
             <img
-              src={`https://ui-avatars.com/api/name=${user?.name}&background=random`}
+              src={userInfo?.user.image ?  `${config.API_URL}/post/stream-video?streamFile=${userInfo.user.image}`: `https://ui-avatars.com/api/name=${user?.name}&background=random`}
               alt=""
               className=" w-full h-full rounded-full object-cover"
             />
