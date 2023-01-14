@@ -6,6 +6,7 @@ import { getTokenPayload } from './utils/getTokenPayload';
 
 const state = proxy( {
 	user: null,
+	userInfo: null,
 	accessToken: null,
 	users: [],
 	posts: [],
@@ -51,6 +52,13 @@ const actions = {
 			state.socket.connect();
 		}
 
+	},
+	setUserInfo: (user)=>{
+		state.userInfo = user
+	},
+	updateUserImg: (user)=>{
+		state.userInfo = {...state.userInfo, user: {image: user.image}}
+	
 	},
 	startLoading: () => {
 		state.isLoading = true
@@ -169,6 +177,7 @@ subscribeKey( state, 'accessToken', () => {
 subscribeKey( state, 'user', () => {
 	if ( state.user ) {
 		localStorage.setItem( 'user', JSON.stringify( state.user ) );
+		//state.user = localStorage.getItem('')
 	} else {
 		localStorage.removeItem( 'user' );
 	}

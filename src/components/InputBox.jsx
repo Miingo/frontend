@@ -21,6 +21,8 @@ function InputBox() {
   const handlePost = async (e) => {
     e.preventDefault();
 
+   console.log(image)
+   
     const formData = new FormData();
     formData.append('postDesc', postDescription);
     if (document) formData.append('document', document);
