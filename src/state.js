@@ -57,7 +57,7 @@ const actions = {
 		state.userInfo = user
 	},
 	updateUserImg: (user)=>{
-		state.userInfo = {...state.userInfo, user: {image: user.image}}
+		state.userInfo = {...state.userInfo, user: {image: user.image,coverImage:user.coverImage}}
 	
 	},
 	startLoading: () => {

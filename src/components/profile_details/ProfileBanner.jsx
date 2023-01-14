@@ -16,31 +16,8 @@ function ProfileBanner() {
   const { userInfo, me } = useSnapshot(state);
   const [follow, setFollow] = useState(true);
   const [partialEdit, setPartialEdit] = useState(false);
-  // const [usr] = useLocalStorage('user');
-
-  //const [userInfo, setUserInfo] = useState(null);
-  //  console.log(userInfo)
-  useEffect(() => {
-    fetchUser();
-  });
-
-  //  console.log(userInfo)
 
 
-  const fetchUser = async () => {
-    try {
-      const { data } = await instance.get(`/user/profile/${me._id}`);
-      if (data) {
-        //setUserInfo(data);
-        //actions.setUserInfo(data)
-        // // setUser
-        actions.setUserInfo(data);
-        console.log(userInfo)
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleEdit = (e) => {
     e.preventDefault();
     
@@ -55,7 +32,7 @@ function ProfileBanner() {
       formData.append("cover", compressedImage);
       const { data } = await instance.patch(`/user/${me._id}/cover`, formData);
       console.log(data);
-      actions.setUserInfo(data)
+      actions.updateUserImg(data)
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +66,7 @@ function ProfileBanner() {
           src={
             userInfo?.user?.coverImage
               ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user?.coverImage}`
-              : null
+              : "/bg2.jpg"
           }
           className="w-full h-full object-cover "
           alt="profile_banner"
