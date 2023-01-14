@@ -19,9 +19,7 @@ function Statuses({ handlePostStatus }) {
   const me = snap.me;
   const users = snap.users;
 
-  const followings = users.filter((user) => user.followers.includes(me._id));
-
-  const followers = users.filter((user) => user.followings.includes(me._id));
+  const followings = users.filter((user) => user.followers?.includes(me._id));
 
   const slideLeft2 = () => {
     var slider = document.getElementById('slider2');
