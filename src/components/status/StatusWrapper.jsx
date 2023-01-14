@@ -1,7 +1,6 @@
 import React from 'react';
 
 const StatusWrapper = ({
-  title,
   closeModal,
   bodyContent,
   footer,
@@ -11,7 +10,7 @@ const StatusWrapper = ({
 }) => {
   return (
     <>
-      <div className='modalClass justify-center items-start py-2 top-[85px] lg:py-4 flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none w-screen shadow-md '>
+      <div className='modalClass justify-center items-start py-2 top-[10px] lg:py-4 flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none w-screen shadow-md '>
          <div
           className={`relative w-screen sm:w-9/12 md:w-7/12  mx-2 sm:mx-auto  ${
             size ? size : 'lg:w-6/12'
@@ -24,15 +23,13 @@ const StatusWrapper = ({
             }`}
           >
             {/*header*/}
-            <div className=' flex items-start justify-between px-8 pb-0 pt-0 rounded-t border-b border-linecolor'>
-              <h3 className='text-xl font-sans font-bold text-charcoal'>
-                {title}
-              </h3>
+            <div className=' flex items-start justify-between px-4 pb-0 pt-0 rounded-t border-b border-linecolor'>
+            
               <button
-                className='p-1 ml-auto  text-black float-right text-3xl leading-none font-semibold'
+                className='p-1 ml-auto  text-black float-right text-xl leading-none font-semibold'
                 onClick={closeModal}
               >
-                <span className='text-charcoal h-6 w-6 text-2xl  hover:text-reddark'>
+                <span className='text-charcoal h-3 w-6 text-xl  hover:text-red dark'>
                   ×
                 </span>
               </button>
