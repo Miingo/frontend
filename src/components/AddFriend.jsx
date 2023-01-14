@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { actions, state } from "../state";
+
 import { HiHeart } from "react-icons/hi";
 import axios from "../services/axios-config";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -30,18 +31,14 @@ function AddFriend({ _id, name, followers, followings, image }) {
 			)
 			.then((res) => {
 				actions.follow(res.data.user);
-				console.log(res.data);
 			})
 			.catch((err) => {
 				setError(err.response.data.message);
-				console.log("ERROR FOLLOWING: ", error);
-				console.log("ERROR FOLLOWING: ", err);
 			});
 
 		setIsFollowing(!isFollowing);
 	};
 
-	// console.log([_id, name, followers, followings, image]);
 
 	return (
 		<div className="w-56 h-56  bg-white rounded-lg shadow-lg inline-block mr-2">

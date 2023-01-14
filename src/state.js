@@ -10,6 +10,7 @@ const state = proxy( {
 	users: [],
 	posts: [],
 	comments: [],
+	statuses: [],
 	followings: [],
 	socket: null,
 	isLoading: false,
@@ -29,7 +30,7 @@ derive( {
 		const payload = getTokenPayload( accessToken )
 
 		return {
-			id: payload.sub,
+			_id: payload.sub,
 			name: payload.name,
 			email: payload.email,
 		}
@@ -65,6 +66,9 @@ const actions = {
 	},
 	addUsers: ( users ) => {
 		state.users = users
+		const loggedInUser = state.users.find( user => user._id === state.me._id )
+		const otherUsers = state.users.filter( user => user._id !== loggedInUser._id )
+		state.users = [loggedInUser, ...otherUsers]
 	},
 	follow: ( userTobeFollowed ) => {
 		const userTobeFollowedIndex = state.users.findIndex( user => user._id === userTobeFollowed._id )
@@ -110,6 +114,10 @@ const actions = {
 		} )
 		state.comments = comments
 		state.comments.sort( ( a, b ) => new Date( b.createdAt ) - new Date( a.createdAt ) )
+	},
+	addStatus: ( status ) => {
+		state.statuses = [status, ...state.statuses]
+		state.statuses.sort( ( a, b ) => new Date( b.createdAt ) - new Date( a.createdAt ) )
 	},
 	setSocket: ( socket ) => {
 		state.socket = socket

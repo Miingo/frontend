@@ -1,30 +1,29 @@
-import { Button, Stack, Spinner } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
-import instance from "../../services/axios-config";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { Button, Spinner, Stack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+
+import { HiOutlinePencil } from 'react-icons/hi';
 import Input from '../Input';
-import { HiOutlinePencil } from "react-icons/hi";
+import instance from '../../services/axios-config';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 function Hobiies() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hobbies, setHobbies] = useState([]);
   const [interests, setInterests] = useState([]);
-  const [user] = useLocalStorage("user");
-  const [userData, setUserData] = useState()
+  const [user] = useLocalStorage('user');
+  const [userData, setUserData] = useState();
 
   useEffect(() => {
-    fetchUser()
-  }, [])
+    fetchUser();
+  }, []);
   const fetchUser = async () => {
     try {
       const { data } = await instance.get(`/user/profile/${user._id}`);
-      console.log(data)
-      setUserData(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+
+      setUserData(data);
+    } catch (error) {}
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,10 +33,9 @@ function Hobiies() {
         hobbies,
         interests
       });
-      console.log(data)
+
       setShowModal(false);
       setIsLoading(false);
-
     } catch (err) {
       setIsLoading(false);
     }
@@ -47,31 +45,38 @@ function Hobiies() {
     <>
       <div className="relative  mt-10 w-full md:w-[880px] lg:w-[640px] pb-2">
         <div className=" space-y-7 px-2 sticky top-0 bg-white rounded-lg shadow-xl">
-          <div class='max-w-md mx-auto space-y-6'>
+          <div class="max-w-md mx-auto space-y-6">
             <div className="flex justify-between">
-              <p class='text-gray-800'>Hobbies & Interest</p>
-              <HiOutlinePencil onClick={() => setShowModal(true)}
-                className="h-6 w-6 mr-2 cursor-pointer" />
+              <p class="text-gray-800">Hobbies & Interest</p>
+              <HiOutlinePencil
+                onClick={() => setShowModal(true)}
+                className="h-6 w-6 mr-2 cursor-pointer"
+              />
             </div>
             {userData && (
               <div>
-                <div class='text-base leading-7'>
-                  <p class='font-medium text-gray-700'>Hobbies:</p>
-                  {userData.hobbies?.map(item => <p class='text-gray-800'>{item || "No Hobbies Specified At the Moment"}</p>)}
-
+                <div class="text-base leading-7">
+                  <p class="font-medium text-gray-700">Hobbies:</p>
+                  {userData.hobbies?.map((item) => (
+                    <p class="text-gray-800">
+                      {item || 'No Hobbies Specified At the Moment'}
+                    </p>
+                  ))}
                 </div>
 
-                <div class='text-base leading-7'>
-                  <p class='font-medium text-gray-700'>Other Interest :</p>
+                <div class="text-base leading-7">
+                  <p class="font-medium text-gray-700">Other Interest :</p>
 
-                  {userData.interests?.map(item => <p class='text-gray-800'>{item || "No Hobbies Specified At the Moment"}</p>)}
-
+                  {userData.interests?.map((item) => (
+                    <p class="text-gray-800">
+                      {item || 'No Hobbies Specified At the Moment'}
+                    </p>
+                  ))}
                 </div>
               </div>
-
-            )
-            }
-          </div>      </div>
+            )}
+          </div>{' '}
+        </div>
       </div>
 
       {showModal ? (
@@ -82,7 +87,6 @@ function Hobiies() {
                 <div className="flex items-center justify-center p-1 border-b border-solid border-gray-300 rounded-t ">
                   <h3 className="text-xl text-gray-700 font=semibold">
                     Hobbies & Interest
-
                   </h3>
                 </div>
                 <div className="relative p-1 flex-auto">
@@ -102,7 +106,6 @@ function Hobiies() {
                         value={interests}
                         onChange={({ target }) => setInterests(target.value)}
                       />
-
                     </Stack>
                   </form>
                 </div>

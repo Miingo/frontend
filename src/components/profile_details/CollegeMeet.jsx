@@ -1,39 +1,16 @@
-import React, { useState } from "react";
-import { HiOutlineUser, HiOutlineX } from "react-icons/hi";
-import { HiTemplate } from "react-icons/hi";
-import { HiDocument } from "react-icons/hi";
-import CollegeStatus from "./CollegeStatus";
+import { HiOutlineUser, HiOutlineX } from 'react-icons/hi';
+import React, { useState } from 'react';
+
+import CollegeStatus from './CollegeStatus';
+import { HiDocument } from 'react-icons/hi';
+import { HiTemplate } from 'react-icons/hi';
+import { state } from '../../state';
+import { useSnapshot } from 'valtio';
 
 function CollegeMeet() {
   const [edit, setEdit] = useState(false);
-
-  const college_statuses = [
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/itgenius/image/upload/v1668007553/pexels-jonathan-borba-12031357_rzxxvm.jpg",
-    },
-    {
-      id: 2,
-      image:
-        "https://res.cloudinary.com/itgenius/image/upload/v1668007542/pexels-mahdi-chaghari-12463279_cwiw1n.jpg",
-    },
-    {
-      id: 3,
-      image:
-        "https://res.cloudinary.com/itgenius/image/upload/v1668007538/pexels-martin-boh%C3%A1%C4%8D-10288457_uwpcbd.jpg",
-    },
-    {
-      id: 4,
-      image:
-        "https://res.cloudinary.com/itgenius/image/upload/v1668007538/pexels-martin-boh%C3%A1%C4%8D-10288457_uwpcbd.jpg",
-    },
-    {
-      id: 5,
-      image:
-        "https://res.cloudinary.com/itgenius/image/upload/v1668011048/pexels-james-gana-13747843_vz07rw.jpg",
-    },
-  ];
+  const snap = useSnapshot(state);
+  const users = snap.users.slice(0, 8);
 
   return (
     <div className="hidden lg:flex flex-col  mt-5 pb-5 shadow-lg bg-white rounded-md  h-auto overflow-hidden">
@@ -90,8 +67,14 @@ function CollegeMeet() {
       </div>
 
       <div className="w-full px-2 py-3">
-        {college_statuses.map(({ id, image }) => (
-          <CollegeStatus key={id} image={image} />
+        {users.map(({ _id, image, name }) => (
+          <CollegeStatus
+            key={_id}
+            image={
+              image ||
+              `https://ui-avatars.com/api/name=${name}&background=random`
+            }
+          />
         ))}
       </div>
 
@@ -100,16 +83,17 @@ function CollegeMeet() {
           <h3 className=""> </h3>
           <span className=" flex ">
             <HiOutlineUser className="w-4 h-4" />
-              56 people
+            {snap.users.length} People
           </span>
         </div>
 
-         <p className="text-gray-600 mb-4"> Description of the event </p>
+        <p className="text-gray-600 mb-4"> Description of the event </p>
 
-         <h3 className="text-gray-700 cursor-pointer hover:underline "> View </h3>
-
+        <h3 className="text-gray-700 cursor-pointer hover:underline ">
+          {' '}
+          {/* View{' '} */}
+        </h3>
       </div>
-
     </div>
   );
 }

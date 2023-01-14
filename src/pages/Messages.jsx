@@ -11,8 +11,12 @@ export default function Messages() {
   const { src, online, name } = location.state;
   const [showModal, setShowModal] = useState(false);
 
+  console.log("SRC :", src);
+  console.log("Online status :", online);
+  console.log("Name :", name);
+
   return (
-    <div className="relative h-screen bg-miingo-gray overflow-y-auto overflow-x-hidden scrollbar-hide">
+    <div className="relative h-screen bg-miingo-gray">
       <Statuses handlePostStatus={() => setShowModal(true)} />
 
       {showModal ? <ModalWrapper handler={setShowModal} /> : null}

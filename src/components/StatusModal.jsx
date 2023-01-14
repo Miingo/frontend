@@ -1,10 +1,11 @@
 /* eslint-disable import/no-anonymous-default-export */
 
+import { actions, state } from '../state';
+
 import { DropzoneArea } from 'material-ui-dropzone';
 import ModalWrapper from './modal/ModalWrapper';
 import axios from '../services/axios-config';
 import { compressImage } from '../services/compressor';
-import { state } from '../state';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useSnapshot } from 'valtio';
 import { useState } from 'react';
@@ -12,32 +13,28 @@ import { useState } from 'react';
 export default ({ handler }) => {
   const [files, setFiles] = useState('');
   const snap = useSnapshot(state);
-  const accessToken = snap.accessToken;
+  const token = snap.accessToken;
   const [loggedInuser] = useLocalStorage('user');
   const me = snap.users.find((user) => user._id === loggedInuser._id);
-  console.log('DERIVED ME: ', me._id);
 
   const handleUploadStatus = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('caption', 'caption');
 
     if (!files) return alert('Please select a file to upload!');
     if (files[0]) {
-      const compressedImage = await compressImage(files[0]);
-      formData.append('file', compressedImage);
+      const image = await compressImage(files[0]);
+      formData.append('file', image);
     }
 
     try {
-      await axios.patch(`/user/status/${me._id}`, formData, {
+      const status = await axios.post(`/user/status/${me._id}`, formData, {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${token}`
         }
       });
-      console.log(`Submitting ${files[0]}`);
-    } catch (err) {
-      console.log(err);
-    }
+      actions.addStatus(status.data);
+    } catch (err) {}
   };
 
   return (
