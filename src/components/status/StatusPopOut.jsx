@@ -1,23 +1,16 @@
+import { actions, state } from '../../state';
+
 import { Carousel } from 'react-responsive-carousel';
-import config from '../../utils/envConfig';
-import { state } from '../../state';
-import { useSnapshot } from 'valtio';
-import { useEffect } from 'react';
 import axios from '../../services/axios-config';
+import config from '../../utils/envConfig';
+import { useEffect } from 'react';
+import { useSnapshot } from 'valtio';
 
 const StatusPopOut = ({ onChange, onClickItem, onClickThumb, statusOwner }) => {
   const snap = useSnapshot(state);
   const statuses = snap.statuses.filter(
     (status) => status.user === statusOwner._id
   );
-  useEffect(() => {
-    axios
-      .get(`/status/${statusOwner._id}`)
-      .then((res) => {
-        state.statuses = res.data;
-      })
-      .catch((err) => console.log(err));
-  }, [statusOwner._id]);
 
   return (
     <div>
