@@ -79,7 +79,6 @@ function Statuses({ handlePostStatus }) {
 
         {showModal ? (
           <StatusWrapper
-            title="Status View"
             closeModal={() => setShowModal(false)}
             bodyContent={<StatusPopOut statusOwner={statusOwner} />}
             footer={true}

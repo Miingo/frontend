@@ -121,3 +121,9 @@ function AddFriend({ _id, name, followers, followings, image }) {
 }
 
 export default AddFriend;
+
+
+
+// const compareArrays = (oldArr ,newArr) => {
+// 	oldArr.length === newArr.length && oldArr.every((el,i) => el === newArr[i])
+// }
