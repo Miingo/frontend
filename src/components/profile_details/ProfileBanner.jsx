@@ -1,31 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiCamera } from "react-icons/hi";
 import PartialProfileEdit from "./PartialProfileEdit";
 import ProfileCaption from "./ProfileCaption";
 import { UserProvider } from "../../context/userContext";
-import { state } from "../../state";
+import { state, actions } from "../../state";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { HiOutlinePencil } from "react-icons/hi2";
 import ProfileTabs from "./ProfileTabs";
+import instance from "../../services/axios-config";
+import { compressImage } from "../../services/compressor";
+import { useSnapshot } from "valtio";
+import config from "../../utils/envConfig";
 
 function ProfileBanner() {
-  
-  const [user] = useLocalStorage("user");
+  const { user, me } = useSnapshot(state);
   const [follow, setFollow] = useState(true);
   const [partialEdit, setPartialEdit] = useState(false);
-
+  // const [usr] = useLocalStorage('user');
+  console.log(user);
   const handleEdit = (e) => {
     e.preventDefault();
 
     setPartialEdit(!partialEdit);
   };
 
-  const submitCover = (file) => {
+  const submitCover = async (file) => {
     console.log(file);
+    try {
+      const compressedImage = await compressImage(file);
+
+      const { data } = await instance.patch(
+        `/user/${me.id}/cover`,
+        compressedImage
+      );
+      if (data) {
+        console.log(data);
+        actions.setUser(data);
+        console.log(user);
+      }
+    } catch (error) {
+      console.log("error in submitCover", error);
+    }
   };
 
-  const submitProfile = (file) => {
-    console.log(file);
+  const submitProfile = async (file) => {
+    try {
+      const compressedImage = await compressImage(file);
+      const formData = new FormData();
+      formData.append("image", compressedImage);
+      const { data } = await instance.patch(`/user/${me.id}/image`, formData);
+      if (data) {
+        console.log(data);
+        actions.setUser(data);
+        console.log(user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -38,7 +69,11 @@ function ProfileBanner() {
 
       <div className=" relative w-full h-56 md:h-96 ">
         <img
-          src="/bg2.jpg"
+          src={
+            user?.image
+              ? `${config.API_URL}/post/stream-video?streamFile=${user.coverImage}`
+              : "/bg2.jpg"
+          }
           loading="lazy"
           className="w-full h-full object-cover "
           alt="profile_banner"
@@ -88,11 +123,11 @@ function ProfileBanner() {
         <div className="relative flex items-center justify-between space-x-2 p-4">
           <div className="absolute -top-6 md:-top-10 w-16 h-16 md:w-20 md:h-20  rounded-full border-4 border-white ">
             <div className="relative w-full h-full">
-              <img
-                src={`https://ui-avatars.com/api/name=${user?.name}&background=random`}
+               <img
+                src={ user?.image?`${config.API_URL}/post/stream-video?streamFile=${user.image}`:`https://ui-avatars.com/api/name=${user?.name}&background=random`}
                 className="w-full h-full rounded-full object-cover "
                 alt="group-profile"
-              />
+              /> 
 
               <form className="absolute top-0 -right-2 flex items-center justify-center bg-gray cursor-pointer p-1 rounded-full">
                 <label
@@ -132,3 +167,5 @@ function ProfileBanner() {
 }
 
 export default ProfileBanner;
+
+
