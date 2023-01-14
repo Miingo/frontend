@@ -293,7 +293,7 @@ const RequireAuth = ({ children }) => {
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   actions.setAccessToken(accessToken);
-  console.log('AUTH TOKEN', { user });
+  
 
   useEffect(() => {
     if (accessToken) {
@@ -303,7 +303,6 @@ const RequireAuth = ({ children }) => {
 
       if (tokenEXp > currentTime) {
         const intervalID = setInterval(() => {
-          console.log('TIME TO EXPIRE', tokenEXp, iat);
           if (
             location.pathname !== '/signin' ||
             location.pathname !== '/signup' ||
@@ -317,7 +316,6 @@ const RequireAuth = ({ children }) => {
               })
               .then((res) => {
                 const data = res.data;
-                console.log('RES: ', data);
                 actions.setAccessToken(data.accessToken);
               });
           }
