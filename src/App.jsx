@@ -109,7 +109,6 @@ export default () => {
     fetchUser();
   });
 
-  //  console.log(userInfo)
 
 
   const fetchUser = async () => {

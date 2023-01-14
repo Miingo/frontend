@@ -12,6 +12,7 @@ const state = proxy( {
 	posts: [],
 	comments: [],
 	statuses: [],
+	viewStatuses: [],
 	followings: [],
 	socket: null,
 	isLoading: false,
@@ -123,9 +124,13 @@ const actions = {
 		state.comments = comments
 		state.comments.sort( ( a, b ) => new Date( b.createdAt ) - new Date( a.createdAt ) )
 	},
-	addStatus: ( status ) => {
-		state.statuses = [status, ...state.statuses]
-		state.statuses.sort( ( a, b ) => new Date( b.createdAt ) - new Date( a.createdAt ) )
+	addStatus: ( statuses ) => {
+		state.statuses = statuses
+	},
+	addViewStatus: ( viewStatuses ) => {
+		state.viewStatuses = viewStatuses
+		console.log( "IN STATE: ", state.viewStatuses )
+		state.viewStatuses.sort( ( a, b ) => new Date( b.createdAt ) - new Date( a.createdAt ) )
 	},
 	setSocket: ( socket ) => {
 		state.socket = socket
