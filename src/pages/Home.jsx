@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import Boards from '../components/Boards';
-import { DropzoneArea } from 'material-ui-dropzone';
 import Feed from '../components/Feed';
 import ModalWrapper from '../components/StatusModal';
 import SideFeed from '../components/SideFeed';
@@ -9,7 +8,6 @@ import Statuses from '../components/Statuses';
 import { actions } from '../state';
 
 function Home({ contentType }) {
-  
   const [showModal, setShowModal] = useState(false);
 
   /**

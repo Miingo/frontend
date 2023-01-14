@@ -1,5 +1,6 @@
 import { actions, state } from './../state';
 import { useEffect, useState } from 'react';
+
 import { Spinner } from '@chakra-ui/react';
 import axios from '../services/axios-config';
 import { compressImage } from '../services/compressor';
@@ -15,7 +16,8 @@ function InputBox() {
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const { me: user } = useSnapshot(state);
+  const { me } = useSnapshot(state);
+
   const handlePost = async (e) => {
     e.preventDefault();
 
@@ -40,7 +42,7 @@ function InputBox() {
       formData.append('video', video);
     }
 
-    formData.append('user', user.id);
+    formData.append('user', me._id);
     try {
       setIsUploading(true);
 
@@ -78,7 +80,7 @@ function InputBox() {
         <div className="hidden md:flex w-10 h-10">
           <img
             className="w-full h-full rounded-full object-cover "
-            src={`https://ui-avatars.com/api/name=${user?.name}&background=random`}
+            src={`https://ui-avatars.com/api/name=${me?.name}&background=random`}
             alt="profile"
           />
         </div>
