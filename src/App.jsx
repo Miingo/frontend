@@ -296,44 +296,49 @@ export default () => {
 };
 
 const RequireAuth = ({ children }) => {
-	const user = localStorage.getItem("user");
-	const location = useLocation();
-	const accessToken = localStorage.getItem("accessToken");
-	const navigate = useNavigate();
-	actions.setAccessToken(accessToken);
 
-	useEffect(() => {
-		if (accessToken) {
-			const { exp: tokenEXp, iat } = getTokenPayload(accessToken);
+  const user = localStorage.getItem('user');
+  const location = useLocation();
+  const accessToken = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
+  actions.setAccessToken(accessToken);
+  //actions.setUser(user)  
 
-			const currentTime = Date.now() / 1000; //time in seconds
+  useEffect(() => {
+    if (accessToken) {
+      const { exp: tokenEXp, iat } = getTokenPayload(accessToken);
 
-			if (tokenEXp > currentTime) {
-				const intervalID = setInterval(() => {
-					if (
-						location.pathname !== "/signin" ||
-						location.pathname !== "/signup" ||
-						location.pathname !== "/"
-					) {
-						api.get("/auth/refresh-token", {
-							headers: {
-								Authorization: `Bearer ${accessToken}`,
-							},
-						}).then((res) => {
-							const data = res.data;
-							actions.setAccessToken(data.accessToken);
-						});
-					}
-				}, (tokenEXp - iat) * 1000 - 10000);
+      const currentTime = Date.now() / 1000; //time in seconds
 
-				return () => clearInterval(intervalID);
-			} else {
-				localStorage.removeItem("accessToken");
-				localStorage.removeItem("user");
-				navigate("/signin");
-			}
-		}
-	}, [accessToken, location.pathname, navigate]);
+      if (tokenEXp > currentTime) {
+        const intervalID = setInterval(() => {
+          if (
+            location.pathname !== '/signin' ||
+            location.pathname !== '/signup' ||
+            location.pathname !== '/'
+          ) {
+            api
+              .get('/auth/refresh-token', {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              })
+              .then((res) => {
+                const data = res.data;
+                actions.setAccessToken(data.accessToken);
+              });
+          }
+        }, (tokenEXp - iat) * 1000 - 10000);
 
-	return user ? children : <Navigate to="/signin" />;
+        return () => clearInterval(intervalID);
+      } else {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        navigate('/signin');
+      }
+    }
+  }, [accessToken, location.pathname, navigate]);
+
+  return user ? children : <Navigate to="/signin" />;
+
 };
