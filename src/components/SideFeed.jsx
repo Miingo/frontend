@@ -1,13 +1,22 @@
-import NewsFeeds from './NewsFeeds';
-import React from 'react';
-import Widgets from './Widgets';
+import React from "react";
+import { useSnapshot } from "valtio";
+import { state } from "../state";
+import NewsFeeds from "./NewsFeeds";
+import Widgets from "./Widgets";
 
-function SideFeed({ group }) {
+
+function SideFeed({ home, showChat, group }) {
+  const { friends } = useSnapshot(state)
   return (
     <div className="relative hidden lg:block w-[340px] mt-2">
       <div className="space-y-4  px-2 sticky top-20">
-        <Widgets group={group} />
-        <NewsFeeds />
+        {
+          home && friends.length > 0 && (
+            <Widgets home={home} showChat={showChat} group={group} />
+          )
+        }
+         <NewsFeeds />
+      
       </div>
     </div>
   );

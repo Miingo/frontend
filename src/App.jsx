@@ -102,6 +102,8 @@ export default () => {
   const navigate = useNavigate();
   const [user] = useLocalStorage('user');
   const name = user?.name;
+  const snap = useSnapshot(state);
+  const location = useLocation();
 
   const userName = name?.split(' ')[0];
 
@@ -135,9 +137,12 @@ export default () => {
           Authorization: `Bearer ${accessToken}`
         }
       });
+      if (snap.socket && snap.socket.connected) {
+        snap.socket.disconnect()
+      }
       actions.setUser(null);
       actions.setAccessToken(null);
-      navigate('/signin');
+      navigate('/signin',{replace: true});
     } catch (error) {
       console.error('ERROR: ', error);
     }
@@ -156,6 +161,56 @@ export default () => {
       enabled: process.env.NODE_ENV !== 'production'
     });
   });
+
+  useEffect(() => {
+    if (accessToken) {
+      console.log('appjx access token', accessToken)
+      const { exp: tokenEXp, iat } = getTokenPayload(accessToken);
+      const currentTime = Date.now() / 1000; //time in seconds
+      
+
+      if (tokenEXp > currentTime - 10) {
+        actions.setAccessToken(accessToken);
+        console.log('initiating sockets')
+        actions.initSocket()
+        const intervalID = setInterval(() => {
+          console.log('TIME TO EXPIRE', tokenEXp, iat);
+          if (
+            location.pathname !== '/signin' ||
+            location.pathname !== '/signup' ||
+            location.pathname !== '/'
+          ) {
+            api
+              .get('/auth/refresh-token', {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              })
+              .then((res) => {
+                const data = res.data;
+                console.log('RES: ', data);
+                actions.setAccessToken(data.accessToken);
+              });
+          }
+        }, (tokenEXp - iat) * 1000 - 10000);
+
+        return () => clearInterval(intervalID);
+      } else if( tokenEXp < currentTime) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        if (snap.socket) {
+          snap.socket.disconnect()
+        }
+       
+        navigate('/signin');
+      }
+    } else {
+      if (snap.socket) {
+        snap.socket.disconnect()
+      }
+      navigate('/signin');
+    }
+  }, [accessToken, location.pathname, navigate, snap.socket]);
 
   return (
     <div className="relative">
@@ -202,6 +257,14 @@ export default () => {
 
       <>
         <Routes>
+        <Route
+            path=""
+            element={
+              <RequireAuth>
+                <Home />
+              </RequireAuth>
+            }
+          />
           {/* test routes */}
           <Route path="ld" element={<NewProfilePage />} />
           <Route path="ad" element={<ActivityCard />} />
@@ -307,7 +370,8 @@ export default () => {
 };
 
 const RequireAuth = ({ children }) => {
-  const user = localStorage.getItem('user');
+  //const user = localStorage.getItem('user');
+  const { me: user} = useSnapshot(state);
   const location = useLocation();
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
@@ -317,10 +381,10 @@ const RequireAuth = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       const { exp: tokenEXp, iat } = getTokenPayload(accessToken);
-
       const currentTime = Date.now() / 1000; //time in seconds
 
-      if (tokenEXp > currentTime) {
+      if (tokenEXp > currentTime - 10) {
+        actions.setAccessToken(accessToken);
         const intervalID = setInterval(() => {
           if (
             location.pathname !== '/signin' ||
@@ -341,11 +405,13 @@ const RequireAuth = ({ children }) => {
         }, (tokenEXp - iat) * 1000 - 10000);
 
         return () => clearInterval(intervalID);
-      } else {
+      } else if( tokenEXp < currentTime) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
         navigate('/signin');
       }
+    } else {
+      navigate('/signin');
     }
   }, [accessToken, location.pathname, navigate]);
 

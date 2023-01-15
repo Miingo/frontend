@@ -27,7 +27,7 @@ function Home({ contentType }) {
         {/* chat */}
 
         {/* <Widgets /> */}
-        <SideFeed />
+        <SideFeed home/>
 
         {/* Feed */}
 

@@ -6,7 +6,7 @@ import { state } from '../state';
 import { useSnapshot } from 'valtio';
 
 export default () => {
-  const { user } = useSnapshot(state);
+  const { me } = useSnapshot(state);
 
-  return user ? <Navigate to="/feed" /> : <SigninForm />;
+  return me? <Navigate to="/feed" /> : <SigninForm />;
 };

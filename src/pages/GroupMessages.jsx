@@ -30,7 +30,7 @@ function GroupMessages() {
       <main className="flex space-x-2 pr-3">
         {/* Side_feed */}
 
-        <SideFeed group={ true } />
+        <SideFeed group />
 
         {/* Group_Messages */}
 

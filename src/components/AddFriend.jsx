@@ -73,30 +73,30 @@ function AddFriend({ _id, name, followers, followings, image }) {
 					</div>
 
 					<div className="">
-						<p className="flex items-center justify-center space-x-2">
+						<div className="flex items-center justify-center space-x-2">
 							<h3 className="text-gray-600"> {name} </h3>
 							<span>
 								{" "}
 								<HiHeart className="h-4 w-4 text-red" />
 							</span>
-						</p>
+						</div>
 					</div>
 
 					<div className=" flex items-center justify-center space-x-2 text-gray-600">
 						<div className="border-r border-blue px-2">
-							<p className="flex flex-col items-center justify-center space-y-2">
+							<div className="flex flex-col items-center justify-center space-y-2">
 								<h3 className="text-gray-600">
 									{" "}
 									{followings?.length}{" "}
 								</h3>
 								<h4>Following</h4>
-							</p>
+							</div>
 						</div>
 						<div className="">
-							<p className="flex flex-col items-center justify-center space-y-2">
+							<div className="flex flex-col items-center justify-center space-y-2">
 								<h3 className="text-gray-600"> {followers?.length} </h3>
 								<h4>Followers</h4>
-							</p>
+							</div>
 						</div>
 					</div>
 
