@@ -52,7 +52,7 @@ function BottomNav({ group }) {
   const [isOpen, setIsOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState(false);
   const snap = useSnapshot(state);
-  const contacts = snap.users;
+  const friends = snap.friends;
   const navigate = useNavigate();
 
   const toggleClick = () => {
@@ -79,12 +79,12 @@ function BottomNav({ group }) {
       </Link>
 
       <div
-        onClick={ toggleGroupClick }
+        onClick={toggleGroupClick}
         className="flex  items-center hover:bg-slate-200 p-3 rounded-lg cursor-pointer "
       >
         <HiOutlineUserGroup className="h-6 w-6" />
 
-        { openGroups ? (
+        {openGroups ? (
           <>
             <CustomBottomSheet
               onClick={() => setOpenGroups((prev) => !prev)}
@@ -135,7 +135,7 @@ function BottomNav({ group }) {
       >
         <span className="absolute top-3 right-3  h-4 w-4   bg-red text-center rounded-full text-white text-xs font-bold">
           {" "}
-          {contacts.length}
+          {friends.length}
         </span>
 
         {/* chaticon */}
@@ -151,24 +151,29 @@ function BottomNav({ group }) {
               <div className=" relative  lg:flex flex-col pb-2 mt-5 shadow-lg bg-white rounded-md  h-screen overflow-y-auto scrollbar-hide ">
                 <div className=" bg-white  sticky top-0 z-30 flex space-x-4 items-center text-gray-700 mb-5">
                   <h2 className="  text-lg text-gray-700 font-medium pl-10 py-4 font-sans">
-                    { group ? "Group Members" : "Chats"}
+                    {group ? "Group Members" : "Chats"}
                   </h2>
                 </div>
 
-                <div className=" px-1  pb-20">
-                  {contacts.map((contact) => (
-                    <Contact
-                      key={contact._id}
-                      src={
-                        contact?.image ||
-                        `https://ui-avatars.com/api/name=${contact?.name}&background=random`
-                      }
-                      name={contact?.name}
-                      online={contact?.online || false}
-                      timestamp={contact?.lastSeen || "8:00am"}
-                    />
-                  ))}
-                </div>
+                {friends.length > 0 ? (
+                  <div className=" px-1  pb-20">
+                    {friends.map((friend) => (
+                      <Contact
+                        key={friend._id}
+                        _id={friend._id}
+                        src={
+                          friend?.image ||
+                          `https://ui-avatars.com/api/name=${friend?.name}&background=random`
+                        }
+                        name={friend?.name}
+                        online={friend?.onlineStatus.online}
+                        timestamp={friend?.onlineStatus.time ? friend?.onlineStatus.time : friend?.onlineStatus.lastSeen}
+                      />
+                    ))}
+                  </div>
+                ) : (<div className="w-full h-auto flex items-center justify-center">You have no friends</div>)
+                }
+
               </div>
             </CustomBottomSheet>
           </>

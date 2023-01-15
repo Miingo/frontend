@@ -14,7 +14,7 @@ function Posts() {
   
   useEffect(() => {
     axios
-      .get(`/post/user/${loggedInUser.id}`, {
+      .get(`/post/user/${loggedInUser._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -25,7 +25,7 @@ function Posts() {
       .catch((err) => {
         setError(err.response.data.message);
       });
-  }, [accessToken, loggedInUser.id]);
+  }, [accessToken, loggedInUser._id]);
 
   return (
     <div className="w-full space-y-4">

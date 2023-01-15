@@ -8,11 +8,15 @@ const state = proxy( {
 	user: null,
 	accessToken: null,
 	users: [],
+	friends: [],
 	posts: [],
 	comments: [],
+	conversations: [],
+	messages: [],
 	followings: [],
 	socket: null,
 	isLoading: false,
+	currentConversation: null,
 	wsErrors: ref( [] ),
 } );
 
@@ -22,14 +26,14 @@ derive( {
 	hasPosts: ( get ) => get( state ).users.length,
 	hasComments: ( get ) => get( state ).comments?.length,
 	hasSocket: ( get ) => get( state ).socket,
-	hasWsErrors: ( get ) => get( state ).wsErrors.length,
+	hasWsErrors: (get) => get(state).wsErrors.length,
 	me: ( get ) => {
 		const accessToken = get( state ).accessToken
 		if ( !accessToken ) return null
 		const payload = getTokenPayload( accessToken )
 
 		return {
-			id: payload.sub,
+			_id: payload.sub,
 			name: payload.name,
 			email: payload.email,
 		}
@@ -49,6 +53,47 @@ const actions = {
 			state.socket.connect();
 		}
 
+	},
+	sendMessage: (message) => {
+		console.log(state.socket)
+		if (state.socket && state.socket.connected) {
+			console.log('message in state before',message)
+			state.socket.emit('send_message', message)
+		}
+	},
+
+	chatStarted: (chat) => {
+		
+		if (state.socket && state.socket.connected) {
+			console.log('JOINNG CHATS', chat)
+			state.socket.emit('joinChat', chat)
+		}
+	},
+	recievedMessages: (message) => {
+		state.messages = [...state.messages, message]
+
+	},
+	setFriends: (friends) => {
+		state.friends = friends;
+	},
+	setOnlineStatus: (freindOnline) => {
+		const friendIndex = state.friends.findIndex(f => f._id.toString() === freindOnline._id.toString());
+		const updatedFriends = [...state.friends.slice(0, friendIndex), freindOnline, ...state.friends.slice(friendIndex + 1)];
+		state.friends = updatedFriends;
+	},
+	setConversations: (conversations) => {
+		state.conversations = conversations
+	},
+	setCurrentConversation: (current) => {
+		state.currentConversation = current
+	},
+	setMessages: (messages) => {
+		state.messages = messages
+	},
+
+	setMessage: (message) => {
+		console.log('FRESH NEW MESSAGE', message);
+		state.messages = [...state.messages, message]
 	},
 	startLoading: () => {
 		state.isLoading = true
@@ -153,9 +198,9 @@ subscribeKey( state, 'accessToken', () => {
 
 } )
 
-subscribeKey( state, 'user', () => {
-	if ( state.user ) {
-		localStorage.setItem( 'user', JSON.stringify( state.user ) );
+subscribeKey( state, 'me', () => {
+	if ( state.me ) {
+		localStorage.setItem( 'user', JSON.stringify( state.me ) );
 	} else {
 		localStorage.removeItem( 'user' );
 	}

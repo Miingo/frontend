@@ -15,10 +15,6 @@ function Home({ contentType }) {
   /**
    * This effect is used to connect first time users to a socket
    */
-  useEffect(() => {
-    actions.initSocket();
-    console.log('WEBSOCKET USE EFFECT!');
-  }, [showModal]);
 
   return (
     <div className=" h-screen w-full bg-miingo-gray  font-serif overflow-y-auto overflow-x-hidden scrollbar-hide ">
@@ -30,7 +26,7 @@ function Home({ contentType }) {
         {/* chat */}
 
         {/* <Widgets /> */}
-        <SideFeed />
+        <SideFeed home/>
 
         {/* Feed */}
 
