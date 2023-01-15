@@ -38,7 +38,7 @@ function ChatMessages({ message, sender, createdAt }) {
        
           <div className="flex flex-col space-y-2 text-xs  max-w-sm md:max-w-md mx-2 order-2 items-end  rounded-md ">
          
-            <p className="px-4 py-2  w-auto rounded-xl  rounded-tl-none rounded-br-none bg-green-100 shadow-lg text-gray-600">
+            <p className="px-4 py-2  w-auto rounded-lg  rounded-bl-none bg-green-100 shadow-lg text-gray-600">
               {message}
             </p>
             <p> {moment(createdAt).startOf('millisecond').fromNow()}</p>

@@ -163,6 +163,5 @@ export default function Chat({ src, online, name }) {
         </div>
 
       </div>
-    </div>
   );
 }
