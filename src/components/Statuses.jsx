@@ -76,16 +76,16 @@ function Statuses({ handlePostStatus }) {
 						closeModal={() => setShowModal(false)}
 						bodyContent={<StatusPopOut statusOwner={statusOwner} />}
 						footer={true}
-						footerContent={
-							<>
-								<div className="flex relative space-x-2">
-									<Input placeholder="comment on status" />
-									<button className="bg-regal-orange text-white p-2 rounded-full">
-										<BiSend />
-									</button>
-								</div>
-							</>
-						}
+						// footerContent={
+						// 	<>
+						// 		<div className="flex relative space-x-2">
+						// 			<Input placeholder="comment on status" />
+						// 			<button className="bg-regal-orange text-white p-2 rounded-full">
+						// 				<BiSend />
+						// 			</button>
+						// 		</div>
+						// 	</>
+						// }
 					/>
 				) : null}
 			</div>

@@ -17,10 +17,9 @@ function ProfileBanner() {
   const [follow, setFollow] = useState(true);
   const [partialEdit, setPartialEdit] = useState(false);
 
-
   const handleEdit = (e) => {
     e.preventDefault();
-    
+
     setPartialEdit(!partialEdit);
   };
 
@@ -32,22 +31,22 @@ function ProfileBanner() {
       formData.append("cover", compressedImage);
       const { data } = await instance.patch(`/user/${me._id}/cover`, formData);
       console.log(data);
-      actions.updateUserImg(data)
+      actions.updateUserImg(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const submitProfile = async (file) => {
-      console.log(file)
+    console.log(file);
     try {
       const compressedImage = await compressImage(file);
       const formData = new FormData();
       formData.append("image", compressedImage);
       const { data } = await instance.patch(`/user/${me._id}/image`, formData);
       console.log(data);
-     actions.updateUserImg(data)
-     // actions.setUserInfo(data)
+      actions.updateUserImg(data);
+      // actions.setUserInfo(data)
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +55,11 @@ function ProfileBanner() {
   return (
     <div className="relative mx-4 flex flex-col bg-white">
       <UserProvider>
-        <ProfileCaption handleEdit={handleEdit} user={userInfo} handleSubmit={submitProfile} />
+        <ProfileCaption
+          handleEdit={handleEdit}
+          user={userInfo}
+          handleSubmit={submitProfile}
+        />
       </UserProvider>
 
       {partialEdit && <PartialProfileEdit />}
@@ -116,22 +119,22 @@ function ProfileBanner() {
       <div className="lg:hidden border-b">
         <div className="relative flex items-center justify-between space-x-2 p-4">
           <div className="absolute -top-6 md:-top-10 w-16 h-16 md:w-20 md:h-20  rounded-full border-4 border-white ">
-            <div className="relative w-full h-full">
-              <img
-                src={
-                  userInfo?.user?.image
-                    ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user?.image}`
-                    : `https://ui-avatars.com/api/name=${userInfo?.user?.name}&background=random`
-                }
-                className="w-full h-full rounded-full object-cover "
-                alt="group-profile"
-              />
+            <form className="relative w-full h-full">
+              <label
+                htmlFor="profile"
+                className="relative w-full h-full"
+              >
+                <img
+                  src={
+                    userInfo?.user?.image
+                      ? `${config.API_URL}/post/stream-video?streamFile=${userInfo?.user?.image}`
+                      : `https://ui-avatars.com/api/name=${userInfo?.user?.name}&background=random`
+                  }
+                  className="w-full h-full rounded-full object-cover "
+                  alt="group-profile"
+                />
 
-              <form className="absolute top-0 -right-2 flex items-center justify-center bg-gray cursor-pointer p-1 rounded-full">
-                <label
-                  htmlFor="profile"
-                  className="flex items-center justify-center space-x-2"
-                >
+                <div className="absolute top-0 -right-2 flex items-center justify-center bg-gray cursor-pointer p-1 rounded-full">
                   <HiCamera className=" w-4 h-4 text-white " />
                   <input
                     name="image"
@@ -144,9 +147,9 @@ function ProfileBanner() {
                       submitProfile(e.target.files[0]);
                     }}
                   />
-                </label>
-              </form>
-            </div>
+                </div>
+              </label>
+            </form>
           </div>
 
           <div className="pl-14 md:pl-20 flex items-center flex-grow justify-between space-x-4">

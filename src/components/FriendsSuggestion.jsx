@@ -1,21 +1,22 @@
-import { FiRotateCw } from 'react-icons/fi';
-import { HiChevronLeft } from 'react-icons/hi';
-import { HiChevronRight } from 'react-icons/hi';
-import { HiSun } from 'react-icons/hi';
-import Suggestion from './Suggestion';
-import { state } from '../state';
-import { useSnapshot } from 'valtio';
+import { FiRotateCw } from "react-icons/fi";
+import { HiChevronLeft } from "react-icons/hi";
+import { HiChevronRight } from "react-icons/hi";
+import { HiSun } from "react-icons/hi";
+import Suggestion from "./Suggestion";
+import { state } from "../state";
+import { useSnapshot } from "valtio";
+import config from "../utils/envConfig";
 
 function FriendsSuggestion({ profile }) {
   const { users } = useSnapshot(state);
 
   const slideLeft = () => {
-    var slider = document.getElementById('slider');
+    var slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft - 500;
   };
 
   const slideRight = () => {
-    var slider = document.getElementById('slider');
+    var slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft + 500;
   };
 
@@ -24,7 +25,7 @@ function FriendsSuggestion({ profile }) {
       <div className=" w-72 flex items-center justify-between mx-4 mt-2 p-2">
         <div className="text-gray-600">
           <h3 className="font-semibold">
-            { profile ? 'Suggested Friends ' : 'Friend Suggestion'}
+            {profile ? "Suggested Friends " : "Friend Suggestion"}
           </h3>
         </div>
 
@@ -40,7 +41,7 @@ function FriendsSuggestion({ profile }) {
 
       <div className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
         <div
-          onClick={ slideLeft }
+          onClick={slideLeft}
           className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
         >
           <HiChevronLeft className="h-4 w-4" />
@@ -55,17 +56,18 @@ function FriendsSuggestion({ profile }) {
             <Suggestion
               key={user._id}
               name={user.name}
-              status={user?.status || 'Active'}
+              status={user?.onlineStatus?.online}
               image={
-                user.image ||
-                `https://ui-avatars.com/api/name=${user?.name}&background=random`
+                user?.image
+                  ? `${config.API_URL}/post/stream-video?streamFile=${user?.image}`
+                  : `https://ui-avatars.com/api/name=${user?.name}&background=random`
               }
             />
           ))}
         </div>
 
         <div
-          onClick={ slideRight }
+          onClick={slideRight}
           className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
         >
           <HiChevronRight className="h-4 w-4" />

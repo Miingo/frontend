@@ -1,24 +1,25 @@
-import { UserProvider, userContext } from '../context/userContext';
-import { actions, state } from '../state';
+import { UserProvider, userContext } from "../context/userContext";
+import { actions, state } from "../state";
 
-import AddFriend from './AddFriend';
-import axios from '../services/axios-config';
-import { useContext } from 'react';
-import { useEffect } from 'react';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { useSnapshot } from 'valtio';
+import AddFriend from "./AddFriend";
+import axios from "../services/axios-config";
+import { useContext } from "react";
+import { useEffect } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { useSnapshot } from "valtio";
+import config from "../utils/envConfig";
 
 function FriendSuggestion() {
-  const [accessToken] = useLocalStorage('accessToken');
-  const [loggedInUser] = useLocalStorage('user');
+  const [accessToken] = useLocalStorage("accessToken");
+  const [loggedInUser] = useLocalStorage("user");
   const snap = useSnapshot(state);
 
   useEffect(() => {
     axios
-      .get('/user', {
+      .get("/user", {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         actions.addUsers(res.data);
@@ -43,8 +44,9 @@ function FriendSuggestion() {
               followers={followers}
               followings={followings}
               image={
-                image ||
-                `https://ui-avatars.com/api/?name=${name}&background=random`
+                image
+                  ? `${config.API_URL}/post/stream-video?streamFile=${image}`
+                  : `https://ui-avatars.com/api/name=${name}&background=random`
               }
             />
           ))}

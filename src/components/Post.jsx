@@ -1,16 +1,17 @@
-import { ChatAltIcon, ShareIcon } from '@heroicons/react/outline';
-import { HiDotsVertical, HiX } from 'react-icons/hi';
+import { ChatAltIcon, ShareIcon } from "@heroicons/react/outline";
+import { HiDotsVertical, HiX } from "react-icons/hi";
 
-import { CommentInputBox } from './CommentInputField';
-import { FaThumbsUp } from 'react-icons/fa';
-import { HiOutlineUserPlus } from 'react-icons/hi2';
-import { Link } from 'react-router-dom';
-import { actions } from '../state';
-import axios from '../services/axios-config';
-import { format } from 'timeago.js';
-import { state } from '../state';
-import { useSnapshot } from 'valtio';
-import { useState } from 'react';
+import { CommentInputBox } from "./CommentInputField";
+import { FaThumbsUp } from "react-icons/fa";
+import { HiOutlineUserPlus } from "react-icons/hi2";
+import { Link } from "react-router-dom";
+import { actions } from "../state";
+import axios from "../services/axios-config";
+import { format } from "timeago.js";
+import { state } from "../state";
+import { useSnapshot } from "valtio";
+import { useState } from "react";
+import config from "../utils/envConfig";
 
 function Post({
   postDesc,
@@ -20,7 +21,7 @@ function Post({
   _id,
   video,
   likes,
-  commentsCount
+  commentsCount,
 }) {
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [isPostDeleted, setIsPostDeleted] = useState(false);
@@ -32,8 +33,8 @@ function Post({
     axios
       .patch(`/post/like/${_id}/user/${me._id}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         actions.likePost(res.data.likes, _id);
@@ -45,8 +46,8 @@ function Post({
     axios
       .delete(`/post/${_id}/user/${user._id}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         actions.deletePost(_id);
@@ -62,16 +63,19 @@ function Post({
             <div className=" w-6 h-6 md:w-8 md:h-8">
               <img
                 className=" w-full h-full object-cover rounded-full"
-                src={`https://ui-avatars.com/api/name=${
-                  user && user?.name
-                }&background=random`}
-                alt=""
+                src={
+                  user.image
+                    ? `${config.API_URL}/post/stream-video?streamFile=${user?.image}`
+                    : `https://ui-avatars.com/api/name=${
+                        user && user?.name
+                      }&background=random`
+                }
+                alt={user?.name + "profile-image"}
               />
             </div>
-
             <div>
               <p className="font-semibold  text-gray-500">
-                {user ? user.name : 'Anonymous'}
+                {user ? user.name : "Anonymous"}
               </p>
               {/* <TimeAgo datetime={createdAt} locale="en_US" /> */}
               {format(createdAt)}
@@ -117,9 +121,9 @@ function Post({
             className="rounded-none flex items-center space-x-1 hover:bg-gray-100 flex-grow justify-center p-2 hover:rounded-lg cursor-pointer"
             onClick={handleLike}
           >
-            <FaThumbsUp color={likes > 0 ? 'red' : 'black'} />
+            <FaThumbsUp color={likes > 0 ? "red" : "black"} />
             <p className="text-xs sm:text-base text-center">
-              {`${likes} ${likes === 1 ? 'Like' : 'likes'}`}
+              {`${likes} ${likes === 1 ? "Like" : "likes"}`}
             </p>
           </div>
 
@@ -129,7 +133,7 @@ function Post({
           >
             <p className="text-xs sm:text-base hidden md:inline-flex">
               {`${commentsCount} ${
-                commentsCount === 1 ? 'Comment' : 'Comments'
+                commentsCount === 1 ? "Comment" : "Comments"
               }`}
             </p>
             <ChatAltIcon className="h-6" />

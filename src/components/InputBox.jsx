@@ -6,6 +6,7 @@ import axios from '../services/axios-config';
 import { compressImage } from '../services/compressor';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useSnapshot } from 'valtio';
+import config from '../utils/envConfig';
 
 function InputBox() {
   const [accessToken] = useLocalStorage('accessToken');
@@ -16,8 +17,9 @@ function InputBox() {
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const { me } = useSnapshot(state);
-
+  const {me,users,} = useSnapshot(state);
+  const user = users.find(user => user._id === me._id)
+  console.log("USER: ", user)
   const handlePost = async (e) => {
     e.preventDefault();
 
@@ -80,7 +82,8 @@ function InputBox() {
         <div className="hidden md:flex w-10 h-10">
           <img
             className="w-full h-full rounded-full object-cover "
-            src={`https://ui-avatars.com/api/name=${me?.name}&background=random`}
+            src={user?.image ? `${config.API_URL}/post/stream-video?streamFile=${user?.image}`: `https://ui-avatars.com/api/name=${user?.name}&background=random`}
+
             alt="profile"
           />
         </div>
