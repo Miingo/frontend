@@ -22,6 +22,7 @@ export default function Messages() {
       const res = await api.get(`chat/conversation/user/${snap.me._id}`)
       if (res.data) {
         actions.setConversations(res.data)
+        console.log('CONVERSATIONS======>',res.data)
       }
     } catch (e) {
       console.log(e);

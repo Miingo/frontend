@@ -10,6 +10,7 @@ export const createSocket = ({ url, state, actions }) => {
         console.log('Connected with id', socket.id, 'and user', state.me.name);   
         socket.on('friends', (data) => {
             actions.setFriends(data);
+            console.log('FRIENDS DATA ======>', data)
         })
 
         socket.on('friendOnline', (data) => {

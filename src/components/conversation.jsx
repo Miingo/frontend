@@ -28,8 +28,8 @@ function Conversation({ _id, members, createdAt }) {
   };
   
   useEffect(() => {
-    const notMe = members.find(m => m._id !== snap.me._id)
-    setConvUser(users.find((u) => u._id === notMe._id));
+    //const notMe = members.find(m => m._id !== snap.me._id)
+    setConvUser(members.find(m => m._id !== snap.me._id));
     
   },[members, setConvUser, snap.me._id, users])
 

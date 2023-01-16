@@ -39,10 +39,7 @@ const Widgets = ({ group, showChat, home }) => {
               <Contact
                 key={friend._id}
                 _id={friend._id}
-                src={
-                  friend?.image ? friend?.image :
-                    `https://ui-avatars.com/api/name=${friend?.name}&background=random`
-                }
+                src={friend?.image }
                 name={friend?.name}
                 online={friend?.onlineStatus.online}
                 timestamp={friend?.onlineStatus.time ? friend?.onlineStatus.time : friend?.onlineStatus.lastSeen}

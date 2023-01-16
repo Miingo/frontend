@@ -37,7 +37,7 @@ function FriendsSuggestion({ profile, followers: users }) {
       </div>
 
       {users?.length > 0 ? (users.map((user) => (
-        <div className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
+        <div  key={user._id} className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
           <div
             onClick={slideLeft}
             className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
@@ -50,7 +50,6 @@ function FriendsSuggestion({ profile, followers: users }) {
             className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
           >
             <Suggestion
-              key={user._id}
               name={user.name}
               status={user?.onlineStatus?.online}
               image={
