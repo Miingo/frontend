@@ -42,6 +42,7 @@ function Contact({ _id, src, name, online, timestamp }) {
 
         actions.chatStarted(res.data?._id);
         getMessages(res.data);
+
         navigate("/messages", {
           state: { _id, src, name, online, timestamp, chat: res.data },
         });
