@@ -37,7 +37,6 @@ derive( {
 
 		return {
 			_id: payload.sub,
-			_id: payload.sub,
 			name: payload.name,
 			email: payload.email,
 		}
@@ -80,7 +79,10 @@ const actions = {
 		}
 	},
 	recievedMessages: (message) => {
-		state.messages = [...state.messages, message]
+		const msgIndx = state.messages.findIndex(m => m._id === message._id)
+		if (!msgIndx) {
+			state.messages = [...state.messages, message]	
+		}
 
 	},
 	setFriends: (friends) => {

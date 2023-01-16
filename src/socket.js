@@ -7,7 +7,10 @@ export const createSocket = ({ url, state, actions }) => {
     const socket = io(socketUrl, { auth: { token: state.accessToken }, transports: ['websocket', 'polling'] });
     
     socket.on('connect', () => {
-        console.log('Connected with id', socket.id, 'and user', state.me.name);
+        console.log('Connected with id', socket.id, 'and user', state.me.name);   
+    })
+
+    if (socket.connected) {
         socket.on('friends', (data) => {
             actions.setFriends(data);
         })
@@ -16,15 +19,15 @@ export const createSocket = ({ url, state, actions }) => {
             actions.setOnlineStatus(data)
         });
 
-        socket.on('recieve_message', (data) => {
-            actions.recievedMessages(data)
-            console.log('MESSAGE RECIEVD', data);
+        socket.on('recieve_message', (message) => {
+            actions.recievedMessages(message)
+            console.log('MESSAGE RECIEVD', message);
         })
 
         socket.on('joinedChat', (data) => {
             console.log('JOINED CHAT', data);
         })
-    })
+    }
 
     return socket;
 }

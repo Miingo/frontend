@@ -162,6 +162,18 @@ export default () => {
     });
   });
 
+  // const init = () => {
+  //   if (accessToken) {
+  //     console.log('initiating sockets')
+  //     actions.initSocket()
+  //     console.log('initiated sockets')
+  //   }
+  // }
+
+  // useEffect(() => {
+  //  init()
+  // }, [])
+  
   useEffect(() => {
     if (accessToken) {
       console.log('appjx access token', accessToken)
