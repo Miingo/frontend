@@ -79,11 +79,8 @@ const actions = {
 		}
 	},
 	recievedMessages: (message) => {
-		const msgIndex = state.messages.findIndex(m => m._id === message._id)
-		if (msgIndex ===null || msgIndex === '') {
 			state.messages = [...state.messages, message]	
-		}
-
+	
 	},
 	setFriends: (friends) => {
 		state.friends = friends;
