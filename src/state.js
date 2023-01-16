@@ -79,8 +79,8 @@ const actions = {
 		}
 	},
 	recievedMessages: (message) => {
-		const msgIndx = state.messages.findIndex(m => m._id === message._id)
-		if (!msgIndx) {
+		const msgIndex = state.messages.findIndex(m => m._id === message._id)
+		if (msgIndex ===null || msgIndex === '') {
 			state.messages = [...state.messages, message]	
 		}
 
