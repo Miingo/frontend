@@ -4,10 +4,12 @@ import moment from 'moment'
 import api from '../services/axios-config'
 import { useSnapshot } from "valtio";
 import { state, actions } from "../state";
+import config from "../utils/envConfig";
 
 function Contact({ _id, src, name, online, timestamp }) {
   const snap = useSnapshot(state);
- 
+	console.log("SOURCE",src);
+  
   const navigate = useNavigate();
 
   const getMessages = async (chat) => {
@@ -57,7 +59,9 @@ function Contact({ _id, src, name, online, timestamp }) {
       <div className=" flex flex-grow-1 items-center space-x-3">
         <div className=" relative w-50 h-50 border-2 border-white rounded-full object-cover">
           <img
-            src={src}
+            src={src
+							? `${config.API_URL}/post/stream-video?streamFile=${src}`
+							: `https://ui-avatars.com/api/name=${name}&background=random`}
             alt="group-pic"
             className="w-50 h-50 rounded-full"
           />

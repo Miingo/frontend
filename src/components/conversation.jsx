@@ -7,11 +7,11 @@ import config from "../utils/envConfig";
 
 function Conversation({ _id, members, createdAt }) {
   const snap = useSnapshot(state);
-  const [convUser, setConUser] = useState();
-  //
- 
+  const [convUser, setConvUser] = useState();
+  const users = snap.users
+  
   const getMessages = async (e) => {
-    console.log('ExXECTING GET MESSAGES');
+    console.log('EXECTING GET MESSAGES');
     e.preventDefault();
     try {
       const res = await api.get(`chat/messages/${_id}`)
@@ -26,20 +26,16 @@ function Conversation({ _id, members, createdAt }) {
       console.error(error);
     }
   };
-
   
   useEffect(() => {
-      setConUser(members.find((m) => m._id !== snap.me._id));
-      console.log('USER WITH CONVERSATION',convUser)
-
-  },[convUser, members, setConUser, snap.me._id])
+    const notMe = members.find(m => m._id !== snap.me._id)
+    setConvUser(users.find((u) => u._id === notMe._id));
+    
+  },[members, setConvUser, snap.me._id, users])
 
   useEffect(() => {
     actions.setCurrentConversation({ _id, members, createdAt })
     //console.log('CURRENT CONVERSATION', snap.currentConversation)
-
-   
-    
   },[_id, convUser, createdAt, members])
   
 

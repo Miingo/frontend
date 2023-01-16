@@ -3,15 +3,16 @@ import React from 'react';
 import { state } from '../state';
 import { useSnapshot } from 'valtio';
 import Conversation from './conversation';
+import config from '../utils/envConfig';
 
 const Widgets = ({ group, showChat, home }) => {
 
 
   //const [contacts, setContatcts] = useState();
   const snap = useSnapshot(state);
-  const freinds = snap.friends;
+  const friends = snap.friends;
   const conversations = snap.conversations;
-
+  console.log("FRIEND IMAGE: ", friends)
 
   return (
     <div className=" relative hidden lg:flex flex-col pb-2 mt-5 shadow-lg bg-white rounded-md  h-auto max-h-screen overflow-y-auto scrollbar-hide ">
@@ -33,13 +34,14 @@ const Widgets = ({ group, showChat, home }) => {
           </>
         ) : (
           <>
-            {freinds.map((friend) => (
+            {friends.map((friend) => (
+
               <Contact
                 key={friend._id}
                 _id={friend._id}
                 src={
-                  friend?.image ||
-                  `https://ui-avatars.com/api/name=${friend?.name}&background=random`
+                  friend?.image ? friend?.image :
+                    `https://ui-avatars.com/api/name=${friend?.name}&background=random`
                 }
                 name={friend?.name}
                 online={friend?.onlineStatus.online}
