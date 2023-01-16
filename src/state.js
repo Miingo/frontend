@@ -17,6 +17,7 @@ const state = proxy( {
 	conversations: [],
 	messages: [],
 	followings: [],
+	followers: [],
 	socket: null,
 	isLoading: false,
 	currentConversation: null,
@@ -78,6 +79,13 @@ const actions = {
 			state.socket.emit('joinChat', chat)
 		}
 	},
+	setFollowers: (followers) => {
+		state.followers = followers
+	},
+	setFollowings: (followings) => {
+		state.followings = followings;
+	},
+
 	recievedMessages: (message) => {
 			state.messages = [...state.messages, message]	
 	

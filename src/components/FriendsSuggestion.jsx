@@ -3,12 +3,9 @@ import { HiChevronLeft } from "react-icons/hi";
 import { HiChevronRight } from "react-icons/hi";
 import { HiSun } from "react-icons/hi";
 import Suggestion from "./Suggestion";
-import { state } from "../state";
-import { useSnapshot } from "valtio";
 import config from "../utils/envConfig";
 
-function FriendsSuggestion({ profile }) {
-  const { users } = useSnapshot(state);
+function FriendsSuggestion({ profile, followers: users }) {
 
   const slideLeft = () => {
     var slider = document.getElementById("slider");
@@ -39,20 +36,19 @@ function FriendsSuggestion({ profile }) {
         </div>
       </div>
 
-      <div className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
-        <div
-          onClick={slideLeft}
-          className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
-        >
-          <HiChevronLeft className="h-4 w-4" />
-        </div>
+      {users?.length > 0 ? (users.map((user) => (
+        <div className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
+          <div
+            onClick={slideLeft}
+            className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
+          >
+            <HiChevronLeft className="h-4 w-4" />
+          </div>
 
-        {/* flex flex-nowrap items-center  space-x-3 justify-center whitespace-nowrap scroll scroll-smooth overflow-x-auto scrollbar-hide */}
-        <div
-          id="slider"
-          className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
-        >
-          {users.map((user) => (
+          <div
+            id="slider"
+            className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
+          >
             <Suggestion
               key={user._id}
               name={user.name}
@@ -63,16 +59,20 @@ function FriendsSuggestion({ profile }) {
                   : `https://ui-avatars.com/api/name=${user?.name}&background=random`
               }
             />
-          ))}
-        </div>
+          </div>
 
-        <div
-          onClick={slideRight}
-          className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
-        >
-          <HiChevronRight className="h-4 w-4" />
+          <div
+            onClick={slideRight}
+            className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
+          >
+            <HiChevronRight className="h-4 w-4" />
+          </div>
         </div>
+      ))) : (<div className="w-full h-auto flex items-center justify-center">
+        start getting active to have some suggestions
       </div>
+      )
+      }
     </div>
   );
 }

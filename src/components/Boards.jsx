@@ -5,30 +5,47 @@ import FriendsSuggestion from './FriendsSuggestion';
 import Gallery from './Gallery';
 import Groups from './Groups';
 import LeadersBoard from './LeadersBoard';
-import React from 'react';
+import React, { useEffect } from 'react';
+import api from '../services/axios-config';
+import { useSnapshot } from 'valtio';
+import { actions, state } from '../state';
 
 function Boards() {
-  return (
-    <div className="relative hidden lg:block  w-[340px] mt-2  ">
+  const { me, followers } = useSnapshot(state)
 
-      <div className=" space-y-4 sticky top-20 ">
-        <LeadersBoard />
 
-        <Groups />
+  const getFollowers = async () => {
+    const res = await api.get(`user/${me._id}/followers/followings`);
+    if (res.data) {
+      actions.setFollowers(res.data.followers);
+      actions.setFollowings(res.data.followings);
+      console.log('FOOLOFH', res?.data)
+    }
+  }
+    useEffect(() => {
+      getFollowers()
+    })
 
-        <Entertainment />
+    return (
+      <div className="relative hidden lg:block  w-[340px] mt-2  ">
 
-        <Gallery />
+        <div className=" space-y-4 sticky top-20 ">
+          <LeadersBoard />
 
-        <BirthdayCard />
+          <Groups />
 
-        <Events />
+          <Entertainment />
 
-        <FriendsSuggestion />
+          <Gallery />
 
+          <BirthdayCard />
+
+          <Events />
+          <FriendsSuggestion followers={followers} />
+
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-export default Boards;
+  export default Boards;
