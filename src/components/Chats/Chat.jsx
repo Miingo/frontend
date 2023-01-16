@@ -10,13 +10,13 @@ import {
 	AiTwotoneCamera,
 	AiOutlineUser,
 } from "react-icons/ai";
-import config from "../../utils/envConfig";
 
 
 export default function Chat({ src, online, name }) {
 	const newMsgRef = useRef(null);
 	const { me, messages, currentConversation } = useSnapshot(state);
 	console.log('MESSAGES FROM SNAP', currentConversation);
+
 	const [openFloat, setOpenFloat] = useState(false);
 	const data = [
 		{
@@ -91,9 +91,7 @@ export default function Chat({ src, online, name }) {
 				<div className=" flex  items-center p-3 mb-4 shadow-md rounded-md">
 					<img
 						className="object-cover w-10 h-10 rounded-full"
-						src={src
-							? `${config.API_URL}/post/stream-video?streamFile=${src}`
-							: `https://ui-avatars.com/api/name=${name}&background=random`}
+						src={src}
 						alt="username"
 					/>
 					<div>
