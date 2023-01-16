@@ -3,6 +3,7 @@ import moment from 'moment'
 import api from '../services/axios-config'
 import { useSnapshot } from "valtio";
 import { actions, state } from "../state";
+import config from "../utils/envConfig";
 
 function Conversation({ _id, members, createdAt }) {
   const snap = useSnapshot(state);
@@ -53,7 +54,7 @@ function Conversation({ _id, members, createdAt }) {
       <div className=" flex flex-grow-1 items-center space-x-3">
         <div className=" relative w-50 h-50 border-2 border-white rounded-full object-cover">
           <img
-            src={convUser?.image}
+            src={ convUser?.image ? `${config.API_URL}/pos/stream=video/sreamFile= ${convUser.image}`: `https://ui-avatars.com/api/name=${convUser?.name}&background=random` }
             alt="user pic"
             className="w-50 h-50 rounded-full"
           />

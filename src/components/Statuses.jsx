@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 
-import { BiSend } from 'react-icons/bi'
 import { GoPlus } from 'react-icons/go'
 import { HiChevronLeft } from 'react-icons/hi'
 import { HiChevronRight } from 'react-icons/hi'
-import Input from './Input'
 import Status from './Status'
 import StatusPopOut from './status/StatusPopOut'
 import StatusWrapper from './status/StatusWrapper'
@@ -61,7 +59,7 @@ function Statuses({ handlePostStatus }) {
 								setStatusOwner(status)
 							}}
 							key={status._id}
-							image={`${config.API_URL}/post/stream-video?streamFile=${status?.file}` || `https://ui-avatars.com/api/?name=${status?.user?.name}`}
+							image={ status.file? `${config.API_URL}post/stream-video?streamFile=${status?.file}` : `https://ui-avatars.com/api/?name=${status?.user?.name}`}
 						/>
 					))}
 				</div>
