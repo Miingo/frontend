@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { HiHeart } from "react-icons/hi";
 import config from "../../utils/envConfig";
-
+import { Link } from "react-router-dom";
 function Friend({ _id, name, followers, followings, image }) {
-  const [profile, setProfile] = useState(false);
-
   return (
     <div className="w-full h-60 md:w-80 md:h-80 border bg-white rounded-lg shadow-lg inline-block mr-2">
       <div className="h-full">
@@ -12,7 +10,11 @@ function Friend({ _id, name, followers, followings, image }) {
           <div className="relative flex items-center justify-center w-20 md:w-56">
             <div className="w-14 h-14 md:w-24 md:h-24 rounded-full">
               <img
-                src={image ? `${config.API_URL}/post/stream-video?streamFile=${image}` : `https://ui-avatars.com/api/name=${name}&background=random`}
+                src={
+                  image
+                    ? `${config.API_URL}/post/stream-video?streamFile=${image}`
+                    : `https://ui-avatars.com/api/name=${name}&background=random`
+                }
                 loading="lazy"
                 className="w-full h-full rounded-full object-cover"
                 alt="friend"
@@ -63,18 +65,14 @@ function Friend({ _id, name, followers, followings, image }) {
           </div>
 
           <div className="flex items-center justify-center">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setProfile(!profile);
-              }}
-              className={`flex  mx-auto ${
-                profile ? "bg-blue text-white" : " text-blue"
-              } px-3 py-1 md:px-5 rounded-lg shadow-xl font-normal hover:shadow-xl active:scale-90
-               transition duration-300 border border-blue`}
-            >
-              view profile
-            </button>
+            <Link to={"/profile/" + _id}>
+              <button
+                className={`flex  mx-auto px-3 py-1 md:px-5 rounded-lg shadow-xl font-normal hover:shadow-xl active:scale-90
+              transition duration-300 border border-blue`}
+              >
+                view profile
+              </button>
+            </Link>
           </div>
         </div>
       </div>

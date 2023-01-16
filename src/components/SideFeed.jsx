@@ -20,6 +20,7 @@ function SideFeed({ home, showChat, group }) {
             <Widgets home={home} showChat={showChat} group={group} />
           )
         }
+        
          <NewsFeeds />
       
       </div>

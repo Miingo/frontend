@@ -6,7 +6,6 @@ import Suggestion from "./Suggestion";
 import config from "../utils/envConfig";
 
 function FriendsSuggestion({ profile, followers: users }) {
-
   const slideLeft = () => {
     var slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft - 500;
@@ -36,8 +35,8 @@ function FriendsSuggestion({ profile, followers: users }) {
         </div>
       </div>
 
-      {users?.length > 0 ? (users.map((user) => (
-        <div  key={user._id} className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
+      {users?.length > 0 ? (
+        <div className="relative flex items-center justify-around space-x-2  mx-auto w-80 h-56 p-2 ">
           <div
             onClick={slideLeft}
             className="bg-miingo-cyan text-gray-600 rounded-full p-1 cursor-pointer"
@@ -49,15 +48,18 @@ function FriendsSuggestion({ profile, followers: users }) {
             id="slider"
             className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
           >
-            <Suggestion
-              name={user.name}
-              status={user?.onlineStatus?.online}
-              image={
-                user?.image
-                  ? `${config.API_URL}/post/stream-video?streamFile=${user?.image}`
-                  : `https://ui-avatars.com/api/name=${user?.name}&background=random`
-              }
-            />
+            {users?.map((user) => (
+              <Suggestion
+                name={user.name}
+                key={user._id}
+                status={user?.onlineStatus?.online}
+                image={
+                  user?.image
+                    ? `${config.API_URL}/post/stream-video?streamFile=${user?.image}`
+                    : `https://ui-avatars.com/api/name=${user?.name}&background=random`
+                }
+              />
+            ))}
           </div>
 
           <div
@@ -67,11 +69,11 @@ function FriendsSuggestion({ profile, followers: users }) {
             <HiChevronRight className="h-4 w-4" />
           </div>
         </div>
-      ))) : (<div className="w-full h-auto flex items-center justify-center">
-        start getting active to have some suggestions
-      </div>
-      )
-      }
+      ) : (
+        <div className="w-full h-full flex items-center justify-center p-5">
+            <p className="text-gray5 font-medium text-base">start getting active to have some suggestions</p>
+        </div>
+      )}
     </div>
   );
 }

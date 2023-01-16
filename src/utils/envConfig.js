@@ -8,8 +8,8 @@ const getEnvVariables = ( envVariable, desc ) => {
 };
 
 const config = {
-  API_URL: getEnvVariables( process.env.REACT_APP_API_URL, 'API_URL' ),
-  WS_URL: getEnvVariables( process.env.REACT_APP_WS_URL, 'WS_URL' )
+  API_URL: getEnvVariables( process.env.REACT_APP_API_URL, 'API_URL'),
+  WS_URL: getEnvVariables( process.env.REACT_APP_WS_URL, 'WS_URL')
 };
 
 export default config;

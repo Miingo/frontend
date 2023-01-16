@@ -24,9 +24,9 @@ function Home({ contentType }) {
       {showModal ? <ModalWrapper handler={setShowModal} /> : null}
 
       <main className="relative flex space-x-2 pr-3 pb-10 ">
-        {/* chat */}
+     
 
-        {/* <Widgets /> */}
+        {/* SideFeed  /> */}
         <SideFeed home/>
 
         {/* Feed */}

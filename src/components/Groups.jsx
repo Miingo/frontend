@@ -1,7 +1,11 @@
 import GroupInfo from './GroupInfo';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Groups() {
+
+  const navigate = useNavigate();
+
   const Leaders = [
     {
       id: 1,
@@ -41,6 +45,11 @@ function Groups() {
     }
   ];
 
+  const createGroup = (e) => {
+       e.preventDefault();
+       navigate("/coming");
+  }
+
   return (
     <div className=" flex flex-col font-serif bg-white rounded-lg shadow-lg p-2 h-[450px]">
       <div className=" flex items-center justify-between p-2 mb-10">
@@ -50,6 +59,7 @@ function Groups() {
 
         <div className="flex items-center">
           <button
+           onClick={ createGroup }
             className={`flex  mx-auto text-white bg-blue px-3 py-1 md:px-5 rounded-full shadow-xl font-normal
                          hover:shadow-xl active:scale-90 transition duration-300`}
           >

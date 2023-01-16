@@ -26,7 +26,6 @@ const Widgets = ({ group, showChat, home }) => {
         {showChat ? (
           <>
             {
-
               conversations?.map(({ _id, members, createdAt }) => (
                 <Conversation key={_id} _id={_id} members={members} createdAt={createdAt} />
               )
@@ -39,7 +38,7 @@ const Widgets = ({ group, showChat, home }) => {
               <Contact
                 key={friend._id}
                 _id={friend._id}
-                src={friend?.image }
+                src={friend?.image}
                 name={friend?.name}
                 online={friend?.onlineStatus.online}
                 timestamp={friend?.onlineStatus.time ? friend?.onlineStatus.time : friend?.onlineStatus.lastSeen}

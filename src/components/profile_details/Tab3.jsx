@@ -1,32 +1,31 @@
-import React, { useEffect } from 'react';
-import { UserProvider, userContext } from '../../context/userContext';
-import { actions, state } from '../../state';
+import React, { useEffect } from "react";
+import { UserProvider, userContext } from "../../context/userContext";
+import { actions, state } from "../../state";
 
-import Friend from './Friend';
-import { SearchIcon } from '@heroicons/react/outline';
-import axios from '../../services/axios-config';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { useSnapshot } from 'valtio';
+import Friend from "./Friend";
+import { SearchIcon } from "@heroicons/react/outline";
+import axios from "../../services/axios-config";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { useSnapshot } from "valtio";
+import config from "../../utils/envConfig";
 
 export default function Tab1() {
-  const [accessToken] = useLocalStorage('accessToken');
-  const [loggedInUser] = useLocalStorage('user');
+  const [accessToken] = useLocalStorage("accessToken");
+  const [loggedInUser] = useLocalStorage("user");
   const snap = useSnapshot(state);
 
   useEffect(() => {
     axios
-      .get('/user', {
+      .get("/user", {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         actions.addUsers(res.data);
       })
       .catch((err) => {});
   }, [accessToken]);
-
-  const users = snap.users.filter((user) => user._id !== loggedInUser._id);
 
   return (
     <div className=" flex flex-col   mt-3 bg-white px-2 py-3 rounded-lg">
@@ -46,9 +45,9 @@ export default function Tab1() {
         </div>
       </div>
 
-      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         <UserProvider>
-          {users
+          {snap.users
             .slice(0, 8)
             .map(({ _id, name, followers, followings, image }) => (
               <Friend
@@ -58,13 +57,14 @@ export default function Tab1() {
                 followers={followers}
                 followings={followings}
                 image={
-                  image ||
-                  `https://ui-avatars.com/api/?name=${name}&background=random`
+                  image
+                  ? `https://ui-avatars.com/api/?name=${name}&background=random`
+                  : `${config.API_URL}/post/stream-video?streamFile=${image}`
                 }
               />
             ))}
         </UserProvider>
-      </div>
+      </div> */}
     </div>
   );
 }
