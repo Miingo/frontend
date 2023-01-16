@@ -8,9 +8,6 @@ export const createSocket = ({ url, state, actions }) => {
     
     socket.on('connect', () => {
         console.log('Connected with id', socket.id, 'and user', state.me.name);   
-    })
-
-    if (socket.connected) {
         socket.on('friends', (data) => {
             actions.setFriends(data);
         })
@@ -27,7 +24,7 @@ export const createSocket = ({ url, state, actions }) => {
         socket.on('joinedChat', (data) => {
             console.log('JOINED CHAT', data);
         })
-    }
+    })
 
     return socket;
 }
